@@ -4,9 +4,11 @@
 #include "gpio.h"
 #include "power.h"
 #include "com.h"
+#include "eerom.h"
 #include "delay.h"
 #include "task.h"
 #include "clock.h"
+#include "button.h"
 #include "power.h"
 #include "tm1650.h"
 #include "kt0803.h"
@@ -24,9 +26,12 @@ void main(void)
   com_initialize();
   power_initialize();
   power_set_enable(1);
-  tm1650_initialize();
+  eerom_initialize();
+  
+  tm1650_initialize();  
   kt0803_initialize();
-
+  
+  button_initialize();
   clock_initialize();
   task_initialize();
   sm_initialize();

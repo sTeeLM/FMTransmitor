@@ -15,7 +15,7 @@
         <TargetCommonOption>
           <Device>STC8G1K17A</Device>
           <Vendor>STC</Vendor>
-          <Cpu>IRAM(0-0xFF) XRAM(0-0x03FF) IROM(0-0x43FF) CLOCK(35000000)</Cpu>
+          <Cpu>IRAM(0-0xFF) XRAM(0-0x03FF) IROM(0-0x41FF) CLOCK(35000000)</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile>"LIB\STARTUP.A51" ("Standard 8051 Startup Code")</StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -191,10 +191,10 @@
             <RomSize>2</RomSize>
             <DataHold>0</DataHold>
             <XDataHold>0</XDataHold>
-            <UseOnchipRom>0</UseOnchipRom>
+            <UseOnchipRom>1</UseOnchipRom>
             <UseOnchipArithmetic>0</UseOnchipArithmetic>
             <UseMultipleDPTR>0</UseMultipleDPTR>
-            <UseOnchipXram>0</UseOnchipXram>
+            <UseOnchipXram>1</UseOnchipXram>
             <HadIRAM>1</HadIRAM>
             <HadXRAM>1</HadXRAM>
             <HadIROM>1</HadIROM>
@@ -273,7 +273,7 @@
               <IRO>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x4400</Size>
+                <Size>0x4200</Size>
               </IRO>
               <IRA>
                 <Type>0</Type>
@@ -441,6 +441,16 @@
               <FileType>1</FileType>
               <FilePath>.\kt0803.c</FilePath>
             </File>
+            <File>
+              <FileName>eerom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\eerom.c</FilePath>
+            </File>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\button.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -450,6 +460,56 @@
               <FileName>sm_trans_fm.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\state_machine\sm_trans_fm.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_alc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_alc.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_rf_gain.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_rf_gain.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_ptc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_ptc.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_stereo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_stereo.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_bass.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_bass.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_fdd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_fdd.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_afre.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_afre.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_scm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_scm.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_pta.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_pta.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -2,6 +2,48 @@
 #define __FM_TRANS_KT0803_H__
 
 #include <stdint.h>
+/*
+  SM_TRANS_ALC,       // Automatic Level Control调节
+  SM_TRANS_SD,        // Silence Detection
+  SM_TRANS_RF_GAIN,   // RF Gain
+  SM_TRANS_PTA,       // Pilot Tone Amplitude
+  SM_TRANS_PTC,       // Pre-emphasis Time-Constant
+  SM_TRANS_STEREO,    // Stereo or Mono
+  SM_TRANS_BASS,      // Bass Boost Control
+  SM_TRANS_FDD,       // Frequency Deviation Delection
+  SM_TRANS_AFRE,      // Audio Frequency Response Enhancement
+  SM_TRANS_SCM,       // Switching Channel Mode Selection
+*/
+
+#define KT0803_CFG_FLAG_ALC_ENABLE  0x1
+#define KT0803_CFG_FLAG_PAPD        0x2
+#define KT0803_CFG_FLAG_PADN        0x4
+#define KT0803_CFG_FLAG_PA_BIAS     0x8
+#define KT0803_CFG_FLAG_PGA_MODE    0x10
+#define KT0803_CFG_FLAG_SLNCDIS     0x20
+#define KT0803_CFG_FLAG_PLTADJ      0x40  // PTA
+#define KT0803_CFG_FLAG_PHTCNST     0x80  // PTC
+#define KT0803_CFG_FLAG_STEREO      0x100 // Stereo or Mono
+#define KT0803_CFG_FLAG_FDD         0x200 // Frequency Deviation Delection
+#define KT0803_CFG_FLAG_AFRE        0x400 // Audio Frequency Response Enhancement
+#define KT0803_CFG_FLAG_SCM         0x800 // Switching Channel Mode Selection
+typedef struct _kt0803_cfg_t
+{
+  uint16_t flag;
+  uint16_t freq;        // Channel
+  uint8_t  alc_delay;   // ALC
+  uint8_t  alc_attack;
+  uint8_t  alc_hold; 
+  uint8_t  alc_high_th;
+  uint8_t  alc_low_th; 
+  uint8_t  slncthl;     // SD
+  uint8_t  slncthh;
+  uint8_t  slnccnt_high;
+  uint8_t  slnccnt_low;
+  uint8_t  rf_gain;     // RF Gain
+  uint8_t  pga_gain;    // PGA (Volume)
+  uint8_t  bass;        // Bass Boost Control
+}kt0803_cfg_t;
 
 typedef enum _kt0803_rf_gain_t
 {
@@ -222,7 +264,11 @@ typedef enum _kt0803_fedv_t
   KT0803_FEDV_112P5KHZ
 }kt0803_fedv_t;
 
+extern kt0803_cfg_t kt0803_cfg;
+
 void kt0803_initialize(void);
+void kt0803_factory_reset(void);
+
 
 /* Channel selection */
 uint16_t kt0803_get_ch(void);
@@ -275,6 +321,8 @@ void kt0803_set_pga_mod(kt0803_pga_mod_t mod);
 /* Bass Boost Control */
 kt0803_bass_t kt0803_get_bass(void);
 void kt0803_set_bass(kt0803_bass_t bass);
+
+/* Stand by */
 bit kt0803_get_standby(void);
 void kt0803_set_standby(bit enable);
 
@@ -320,4 +368,7 @@ void kt0803_set_fedv(kt0803_fedv_t fedv);
 bit kt0803_get_au_enhancement(void);
 void kt0803_set_au_enhancement(bit enable);
 
+/* Switching Channel Mode Selection. */
+kt0803_swch_mod_t kt0803_get_swch_mod(void);
+void kt0803_set_swch_mod(kt0803_swch_mod_t mod);
 #endif

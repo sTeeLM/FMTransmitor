@@ -2,6 +2,8 @@
 #include "i2c.h"
 #include "debug.h"
 
+tm1650_cfg_t tm1650_cfg;
+
 static uint8_t tm1650_display_mode;
 /*        A
         F   B
@@ -61,11 +63,17 @@ static unsigned char code tm1650_display_code[] =
    0x72, //1110010  Y
    0x00, //         Z ascii 0x5A
 };
+
+void tm1650_factory_reset(void)
+{
+  tm1650_cfg.brightness = 7;
+}
+
 void tm1650_initialize(void)
 {
   tm1650_display_mode = 0;
   tm1650_set_mod(TM1650_MOD_8_DIG);
-  tm1650_set_brightness(7);
+  tm1650_set_brightness(tm1650_cfg.brightness);
   tm1650_enable_display(1);
   tm1650_clear();  
 }

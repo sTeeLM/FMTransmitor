@@ -2,6 +2,18 @@
 #include "debug.h"
 #include "i2c.h"
 
+kt0803_cfg_t kt0803_cfg;
+
+void kt0803_factory_reset(void)
+{
+  
+}
+
+void kt0803_initialize(void)
+{
+  
+}
+// -----------------------------------------------------------------------------
 static uint8_t kt0803_read_reg(uint8_t addr)
 {
   uint8_t dat;
@@ -57,8 +69,6 @@ static void kt0803_set_reg(uint8_t addr, uint8_t bit_index, uint8_t bit_len, uin
     return;
   }
   
-  CDBG("kt0803_set_reg [%02bx][%02bx][%02bx] ? -> [%02bx]\n", addr, bit_index, bit_len, dat);
-  
   if(bit_len) {
     for(i = 0; i < bit_len; i ++){
       bit_mask <<= 1;
@@ -69,9 +79,7 @@ static void kt0803_set_reg(uint8_t addr, uint8_t bit_index, uint8_t bit_len, uin
   bit_off = (bit_index + 1 - bit_len);
   
   bit_mask <<= bit_off;
-  
-  CDBG("kt0803_set_reg bit_mask %02bx bit_off %02bx\n", bit_mask, bit_off);
-  
+    
   tmp = kt0803_read_reg(addr);
   old_dat = (tmp & bit_mask) >> bit_off;
   
@@ -81,10 +89,6 @@ static void kt0803_set_reg(uint8_t addr, uint8_t bit_index, uint8_t bit_len, uin
   CDBG("kt0803_set_reg [%02bx][%02bx][%02bx] : [%02bx] -> [%02bx]\n", addr, bit_index, bit_len, old_dat, dat);
 }
 
-void kt0803_initialize(void)
-{
-  
-}
 /* 
   70MHz ~ 108MHz 
   700~1080 * 20
