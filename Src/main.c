@@ -31,6 +31,10 @@ void main(void)
   task_initialize();
   sm_initialize();
   
+  delay_ms(1000);
+  
+  kt0803_set_ch(1000);
+  
   while(1) {
     uint8_t sc;
     delay_ms(1000);
@@ -43,6 +47,7 @@ void main(void)
       i = '-';
     sc = tm1650_get_scan_code();
     CDBG("tm1650_get_scan_code %bx\n", sc);
+    CDBG("kt0803_get_ch %x\n", kt0803_get_ch());
   }
   
   /*
