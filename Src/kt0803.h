@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 /*
-  SM_TRANS_ALC,       // Automatic Level Control调节
+  SM_TRANS_ALC,       // Automatic Level Control
   SM_TRANS_SD,        // Silence Detection
   SM_TRANS_RF_GAIN,   // RF Gain
   SM_TRANS_PTA,       // Pilot Tone Amplitude
@@ -13,26 +13,29 @@
   SM_TRANS_FDD,       // Frequency Deviation Delection
   SM_TRANS_AFRE,      // Audio Frequency Response Enhancement
   SM_TRANS_SCM,       // Switching Channel Mode Selection
+  SM_TRANS_PA         // Power Amplifier
 */
 
 #define KT0803_CFG_FLAG_ALC_ENABLE  0x1
-#define KT0803_CFG_FLAG_PAPD        0x2
+#define KT0803_CFG_FLAG_PDPA        0x2  // Power Amplifier
 #define KT0803_CFG_FLAG_PADN        0x4
 #define KT0803_CFG_FLAG_PA_BIAS     0x8
-#define KT0803_CFG_FLAG_PGA_MODE    0x10
-#define KT0803_CFG_FLAG_SLNCDIS     0x20
-#define KT0803_CFG_FLAG_PLTADJ      0x40  // PTA
-#define KT0803_CFG_FLAG_PHTCNST     0x80  // PTC
-#define KT0803_CFG_FLAG_STEREO      0x100 // Stereo or Mono
-#define KT0803_CFG_FLAG_FDD         0x200 // Frequency Deviation Delection
-#define KT0803_CFG_FLAG_AFRE        0x400 // Audio Frequency Response Enhancement
-#define KT0803_CFG_FLAG_SCM         0x800 // Switching Channel Mode Selection
+#define KT0803_CFG_FLAG_SLNCDIS     0x10
+#define KT0803_CFG_FLAG_PLTADJ      0x20  // PTA
+#define KT0803_CFG_FLAG_PHTCNST     0x40  // PTC
+#define KT0803_CFG_FLAG_STEREO      0x80  // Stereo or Mono
+#define KT0803_CFG_FLAG_FDD         0x100 // Frequency Deviation Delection
+#define KT0803_CFG_FLAG_AFRE        0x200 // Audio Frequency Response Enhancement
+#define KT0803_CFG_FLAG_SCM         0x300 // Switching Channel Mode Selection
+#define KT0803_CFG_FLAG_MUTE        0x80  // Mute
+
 typedef struct _kt0803_cfg_t
 {
   uint16_t flag;
   uint16_t freq;        // Channel
   uint8_t  alc_delay;   // ALC
   uint8_t  alc_attack;
+  uint8_t  alc_comp_gain;  
   uint8_t  alc_hold; 
   uint8_t  alc_high_th;
   uint8_t  alc_low_th; 
@@ -41,7 +44,7 @@ typedef struct _kt0803_cfg_t
   uint8_t  slnccnt_high;
   uint8_t  slnccnt_low;
   uint8_t  rf_gain;     // RF Gain
-  uint8_t  pga_gain;    // PGA (Volume)
+  int8_t   pga_gain;    // PGA (Volume)
   uint8_t  bass;        // Bass Boost Control
 }kt0803_cfg_t;
 
@@ -133,14 +136,14 @@ typedef enum _kt0803_alc_attack_t
 
 typedef enum _kt0803_alc_comp_gain_t
 {
-  KT0803_ALC_COMP_GAIN_6DB = 0,
-  KT0803_ALC_COMP_GAIN_3DB,
-  KT0803_ALC_COMP_GAIN_0DB,
-  KT0803_ALC_COMP_GAIN_N3DB,
-  KT0803_ALC_COMP_GAIN_N6DB,
+  KT0803_ALC_COMP_GAIN_N6DB = 0,
   KT0803_ALC_COMP_GAIN_N9DB,
   KT0803_ALC_COMP_GAIN_N12DB,
-  KT0803_ALC_COMP_GAIN_N15DB,  
+  KT0803_ALC_COMP_GAIN_N15DB, 
+  KT0803_ALC_COMP_GAIN_6DB,
+  KT0803_ALC_COMP_GAIN_3DB,
+  KT0803_ALC_COMP_GAIN_0DB,
+  KT0803_ALC_COMP_GAIN_N3DB, 
 }kt0803_alc_comp_gain_t;
 
 typedef enum _kt0803_alc_hold_t
@@ -329,8 +332,8 @@ void kt0803_set_standby(bit enable);
 /* Power amplifier */
 kt0803_pa_ctl_t kt0803_get_pa_ctl(void);
 void kt0803_set_pa_ctl(kt0803_pa_ctl_t ctl);
-bit kt0803_get_papd(void);
-void kt0803_set_papd(bit down);
+bit kt0803_get_pdpa(void);
+void kt0803_set_pdpa(bit down);
 bit kt0803_get_padn(void);
 void kt0803_set_padn(bit enable);
 bit kt0803_get_pa_bias(void);
@@ -371,4 +374,14 @@ void kt0803_set_au_enhancement(bit enable);
 /* Switching Channel Mode Selection. */
 kt0803_swch_mod_t kt0803_get_swch_mod(void);
 void kt0803_set_swch_mod(kt0803_swch_mod_t mod);
+
+//-----------------------------------------------
+uint16_t kt0803_next_ch(bit coarse);
+uint16_t kt0803_prev_ch(bit coarse);
+
+
+uint8_t kt0803_get_vol(void);
+uint8_t kt0803_next_vol(bit coarse);
+uint8_t kt0803_prev_vol(bit coarse);
+
 #endif

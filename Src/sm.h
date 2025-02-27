@@ -9,6 +9,7 @@
 enum sm_functions
 {
   SM_TRANS_FM  = 0,   // 主功能（含频道选择）
+  SM_TRANS_BRIGHT,    // 亮度调节
   SM_TRANS_ALC,       // Automatic Level Control调节
   SM_TRANS_SD,        // Silence Detection
   SM_TRANS_RF_GAIN,   // RF Gain
@@ -19,6 +20,7 @@ enum sm_functions
   SM_TRANS_FDD,       // Frequency Deviation Delection
   SM_TRANS_AFRE,      // Audio Frequency Response Enhancement
   SM_TRANS_SCM,       // Switching Channel Mode Selection
+  SM_TRANS_PA         // Power Amplifier
 };
 
 typedef void (*SM_PROC)(uint8_t to_func, uint8_t to_state, enum task_events ev);

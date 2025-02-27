@@ -8,7 +8,7 @@
 #include "sm.h"
 
 /* hardware*/
-
+#include "button.h"
 
 /*
   EV_INIT                = 0,

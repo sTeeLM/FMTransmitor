@@ -316,7 +316,7 @@
             <Fuzzy>3</Fuzzy>
             <Optimize>8</Optimize>
             <WarningLevel>2</WarningLevel>
-            <SizeSpeed>1</SizeSpeed>
+            <SizeSpeed>0</SizeSpeed>
             <ObjectExtend>1</ObjectExtend>
             <ACallAJmp>0</ACallAJmp>
             <InterruptVectorAddress>0</InterruptVectorAddress>
@@ -348,7 +348,7 @@
             <DataOverlaying>1</DataOverlaying>
             <OverlayString></OverlayString>
             <MiscControls></MiscControls>
-            <DisableWarningNumbers></DisableWarningNumbers>
+            <DisableWarningNumbers>16</DisableWarningNumbers>
             <LinkerCmdFile></LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
@@ -356,8 +356,8 @@
             <UserClasses></UserClasses>
             <CSection></CSection>
             <UserSection></UserSection>
-            <CodeBaseAddress></CodeBaseAddress>
-            <XDataBaseAddress></XDataBaseAddress>
+            <CodeBaseAddress>0X0000-0X41FF</CodeBaseAddress>
+            <XDataBaseAddress>0X0000-0X03FF</XDataBaseAddress>
             <PDataBaseAddress></PDataBaseAddress>
             <BitBaseAddress></BitBaseAddress>
             <DataBaseAddress></DataBaseAddress>
@@ -510,6 +510,16 @@
               <FileName>sm_trans_pta.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\state_machine\sm_trans_pta.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_bright.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_bright.c</FilePath>
+            </File>
+            <File>
+              <FileName>sm_trans_pa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\state_machine\sm_trans_pa.c</FilePath>
             </File>
           </Files>
         </Group>

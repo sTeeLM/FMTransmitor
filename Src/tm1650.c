@@ -71,9 +71,11 @@ void tm1650_factory_reset(void)
 
 void tm1650_initialize(void)
 {
+  CDBG("kt0803 kt0803_initialize\n");
+  
   tm1650_display_mode = 0;
   tm1650_set_mod(TM1650_MOD_8_DIG);
-  tm1650_set_brightness(tm1650_cfg.brightness);
+  tm1650_set_brightness(7);
   tm1650_enable_display(1);
   tm1650_clear();  
 }
@@ -84,6 +86,14 @@ void tm1650_clear(void)
   tm1650_set_dig(1, 0, ' '); 
   tm1650_set_dig(2, 0, ' ');
   tm1650_set_dig(3, 0, ' '); 
+}
+
+void tm1650_set_str(const char * str)
+{
+  tm1650_set_dig(0, 0, str[0]);
+  tm1650_set_dig(1, 0, str[1]); 
+  tm1650_set_dig(2, 0, str[2]);
+  tm1650_set_dig(3, 0, str[3]); 
 }
 
 void tm1650_set_mod(tm1650_mod_t mod)
@@ -125,6 +135,7 @@ void tm1650_set_dig(uint8_t index, bit dp, uint8_t dat)
   uint8_t addr = 0x68;
   
   index %= 4;
+  index = 3 - index;
   addr += index * 2;
   
   if(dat == 0) {
@@ -178,6 +189,7 @@ uint8_t tm1650_get_scan_code(void)
   
   I2C_Write(0x49);
   if(I2C_GetAck()) {
+    CDBG("tm1650_get_scan_code failed\n");
     goto failed;
   }  
   

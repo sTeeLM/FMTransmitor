@@ -4,6 +4,8 @@
 #include "debug.h"
 #include "kt0803.h"
 #include "tm1650.h"
+#include "delay.h"
+#include "button.h"
 
 static void eerom_iap_idle()
 {
@@ -59,7 +61,10 @@ static void eerom_iap_erase(uint16_t addr)
 
 static bit eerom_is_factory_reset(void)
 {
-  return tm1650_get_scan_code() == 0x44; // +
+  uint8_t key_code;
+  delay_ms(500);
+  key_code = tm1650_get_scan_code();
+  return key_code == BUTTON_NEG_KEY_CODE; // -
 }
 
 void eerom_initialize (void)

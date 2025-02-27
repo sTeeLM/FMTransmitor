@@ -1,18 +1,264 @@
 #include "kt0803.h"
 #include "debug.h"
 #include "i2c.h"
+#include "delay.h"
 
 kt0803_cfg_t kt0803_cfg;
 
 void kt0803_factory_reset(void)
 {
+  // Channel: 100.0MHz
+  kt0803_cfg.freq = 1000;
   
+  kt0803_cfg.flag = 0;
+  
+  // Automatic Level Control: disabled
+  kt0803_cfg.flag &= ~ KT0803_CFG_FLAG_ALC_ENABLE; 
+  kt0803_cfg.alc_delay = (uint8_t)KT0803_ALC_DELAY_25US;
+  kt0803_cfg.alc_attack = (uint8_t)KT0803_ALC_ATTACK_25US;
+  kt0803_cfg.alc_comp_gain = (uint8_t)KT0803_ALC_COMP_GAIN_N3DB;
+  kt0803_cfg.alc_hold = (uint8_t)KT0803_ALC_HOLD_5S;
+  kt0803_cfg.alc_high_th = (uint8_t)KT0803_ALC_HIGH_TH_0P6;
+  kt0803_cfg.alc_low_th = (uint8_t)KT0803_ALC_LOW_TH_0P25; 
+
+  // Silence Detection: disable
+  kt0803_cfg.flag |= KT0803_CFG_FLAG_SLNCDIS;
+  kt0803_cfg.slncthl = (uint8_t)KT0803_SLNCTHL_025MV;
+  kt0803_cfg.slncthh = (uint8_t)KT0803_SLNCTHH_050MV;
+  kt0803_cfg.slnccnt_high = (uint8_t)KT0803_SLNCCNT_HIGH_15;
+  kt0803_cfg.slnccnt_low = (uint8_t)KT0803_SLNCCNT_LOW_1;
+  
+  // RF Gain: 108.0dB
+  kt0803_cfg.rf_gain = (uint8_t)KT0803_RF_GAIN_1080;
+  
+  // Pilot Tone Amplitude: KT0803_PLTADJ_LOW
+  kt0803_cfg.flag &= ~KT0803_CFG_FLAG_PLTADJ;
+  
+  // Pre-emphasis Time-Constant: KT0803_PHTCNST_75US
+  kt0803_cfg.flag &= ~KT0803_CFG_FLAG_PHTCNST;
+  
+  // Stereo or Mono: Stereo
+  kt0803_cfg.flag &= ~KT0803_CFG_FLAG_STEREO;
+  
+  // Bass Boost Control: KT0803_BASS_DISABLE
+  kt0803_cfg.bass = (uint8_t)KT0803_BASS_DISABLE;
+  
+  // Frequency Deviation Delection: disabled
+  kt0803_cfg.flag &= ~KT0803_CFG_FLAG_FDD;
+  
+  // Audio Frequency Response Enhancement: disabled
+  kt0803_cfg.flag &= ~KT0803_CFG_FLAG_AFRE;
+  
+  // Switching Channel Mode Selection: Mute
+  kt0803_cfg.flag &= ~KT0803_CFG_FLAG_SCM;
+  
+  // PGA: 0dB, 1dB step
+  kt0803_cfg.pga_gain = 0;
+  
+  // Power Amplifier: disable PDPA, PADN, PA_BIAS
+  kt0803_cfg.flag &= ~(KT0803_CFG_FLAG_PDPA|KT0803_CFG_FLAG_PADN);
+  kt0803_cfg.flag |= KT0803_CFG_FLAG_PA_BIAS;
+  
+  // Mute: disable
+  kt0803_cfg.flag &= ~KT0803_CFG_FLAG_MUTE;
+  
+}
+
+static uint8_t kt0803_read_reg(uint8_t addr);
+
+static void kt0803_dump_device(void)
+{
+  uint8_t i, dat;
+  
+  
+  CDBG("    ");
+  for(i = 0 ; i <= 0xF ; i ++ ) {
+    CDBG("  %bx", i);
+  }
+  CDBG("\n");
+  for(i = 0 ; i <= 0x27 ; i ++ ) {
+    if(i % 16 == 0) {
+      if(i != 0) {
+        CDBG("\n");
+      }      
+      CDBG("[%02bx] ", i);
+    }
+    dat = kt0803_read_reg(i);
+    CDBG("%02bx ", dat);
+  }
+  if(i % 16 != 0) {
+    CDBG("\n");
+  }
+}
+
+static void kt0803_dump_cfg(void)
+{
+  CDBG("kt0803 cfg:\n");
+  
+  CDBG("flag 0x%04x\n", kt0803_cfg.flag);
+  CDBG("freq %u\n", kt0803_cfg.freq);
+  
+  CDBG("alc_delay %bu\n", kt0803_cfg.alc_delay); 
+  CDBG("alc_attack %bu\n", kt0803_cfg.alc_attack);
+  CDBG("alc_comp_gain %bu\n", kt0803_cfg.alc_comp_gain);  
+  CDBG("alc_hold %bu\n", kt0803_cfg.alc_hold);
+  CDBG("alc_high_th %bu\n", kt0803_cfg.alc_high_th);
+  CDBG("alc_low_th %bu\n", kt0803_cfg.alc_low_th);
+
+  CDBG("slncthl %bu\n", kt0803_cfg.slncthl); 
+  CDBG("slncthh %bu\n", kt0803_cfg.slncthh);
+  CDBG("slnccnt_high %bu\n", kt0803_cfg.slnccnt_high);  
+  CDBG("slnccnt_low %bu\n", kt0803_cfg.slnccnt_low);
+  
+  CDBG("pga_gain %bd\n", kt0803_cfg.pga_gain); 
+  
+  CDBG("rf_gain %bu\n", kt0803_cfg.rf_gain);
+
+  CDBG("bass %bu\n", kt0803_cfg.bass);  
 }
 
 void kt0803_initialize(void)
 {
+  CDBG("kt0803 kt0803_initialize\n");
+  kt0803_dump_cfg();
   
+  /* wait device ready.. */
+  while(!kt0803_get_pw_ok()){
+    delay_ms(100);
+  }
+  
+  /*
+  Power amplifier structure selection
+    0 = Internal power supply, KT0803 compatible
+    1 = External power supply via external inductor
+    Note : When an external inductor is used, this bit
+    must be set to 1 immediately after the Power OK
+    indicator Reg 0x0F[4] is set to 1. Otherwise, the
+    device may be destroyed!  
+  */
+  
+  CDBG("kt0803 before\n");
+  kt0803_dump_device();
+  
+  /* load cfg into chip */
+  // Channel:
+  kt0803_set_ch(kt0803_cfg.freq);
+  kt0803_set_mute(0);
+  
+  // Automatic Level Control:
+  kt0803_set_alc_enable((kt0803_cfg.flag & KT0803_CFG_FLAG_ALC_ENABLE) ? 1 : 0);
+  kt0803_set_alc_delay(kt0803_cfg.alc_delay);
+  kt0803_set_alc_attack(kt0803_cfg.alc_attack);
+  kt0803_set_alc_comp_gain(kt0803_cfg.alc_comp_gain);
+  kt0803_set_alc_hold(kt0803_cfg.alc_hold);
+  kt0803_set_alc_high_th(kt0803_cfg.alc_high_th);
+  kt0803_set_alc_low_th(kt0803_cfg.alc_low_th);
+  
+  // Silence Detection
+  kt0803_set_slncdis((kt0803_cfg.flag & KT0803_CFG_FLAG_SLNCDIS) ? 1 : 0);
+  kt0803_set_slncthl(kt0803_cfg.slncthl);
+  kt0803_set_slncthh(kt0803_cfg.slncthh);
+  kt0803_set_slnccnt_high(kt0803_cfg.slnccnt_high);
+  kt0803_set_slnccnt_low(kt0803_cfg.slnccnt_low);
+  
+  // RF Gain
+  kt0803_set_rf_gain(kt0803_cfg.rf_gain);
+  
+  // Pilot Tone Amplitude
+  kt0803_set_pltadj((kt0803_cfg.flag & KT0803_CFG_FLAG_PLTADJ) ? 1 : 0);
+  
+  // Pre-emphasis Time-Constant
+  kt0803_set_phtcnst((kt0803_cfg.flag & KT0803_CFG_FLAG_PHTCNST) ? 1 : 0);
+  
+  // Stereo or Mono
+  kt0803_set_mono((kt0803_cfg.flag & KT0803_CFG_FLAG_STEREO) ? 1 : 0);
+  
+  // Bass Boost Control
+  kt0803_set_bass(kt0803_cfg.bass);
+  
+  // Frequency Deviation Delection
+  kt0803_set_fedv((kt0803_cfg.flag & KT0803_CFG_FLAG_FDD) ? 1 : 0);
+  
+  // Audio Frequency Response Enhancement
+  kt0803_set_au_enhancement((kt0803_cfg.flag & KT0803_CFG_FLAG_AFRE) ? 1 : 0);
+  
+  // Switching Channel Mode Selection
+  kt0803_set_swch_mod((kt0803_cfg.flag & KT0803_CFG_FLAG_SCM) ? 1 : 0);
+  
+  // PGA, 1db step with PGA_LSB
+  kt0803_set_pga_mod(KT0803_PGA_MOD_1DB_STEP);
+  kt0803_set_pga_gain(kt0803_cfg.pga_gain);
+  
+  // Power Amplifier
+  kt0803_set_pdpa((kt0803_cfg.flag & KT0803_CFG_FLAG_PDPA) ? 1 : 0);
+  kt0803_set_padn((kt0803_cfg.flag & KT0803_CFG_FLAG_PADN) ? 1 : 0);
+  kt0803_set_pa_bias((kt0803_cfg.flag & KT0803_CFG_FLAG_PA_BIAS) ? 1 : 0);
+
+  // Mute:
+  kt0803_set_mute((kt0803_cfg.flag & KT0803_CFG_FLAG_MUTE) ? 1 : 0);
+
+  CDBG("kt0803 after\n");
+  kt0803_dump_device();
 }
+
+// ----------------------------------------------------------------------------
+uint16_t kt0803_next_ch(bit coarse)
+{
+  if(coarse)
+    kt0803_cfg.freq += 10;
+  else
+    kt0803_cfg.freq ++;
+  if(kt0803_cfg.freq > 1080) kt0803_cfg.freq = 700;
+  kt0803_set_ch(kt0803_cfg.freq);
+  kt0803_set_mute(0);
+  return kt0803_cfg.freq;
+}
+
+uint16_t kt0803_prev_ch(bit coarse)
+{
+  if(coarse)
+    kt0803_cfg.freq -= 10;
+  else
+    kt0803_cfg.freq --;
+  if(kt0803_cfg.freq < 700) kt0803_cfg.freq = 1080;
+  kt0803_set_ch(kt0803_cfg.freq);
+  kt0803_set_mute(0);
+  return kt0803_cfg.freq;
+}
+
+uint8_t kt0803_get_vol(void)
+{
+  return kt0803_cfg.pga_gain + 15;
+}
+
+uint8_t kt0803_next_vol(bit coarse)
+{
+  if(coarse)
+    kt0803_cfg.pga_gain += 4;
+  else
+    kt0803_cfg.pga_gain ++;
+  if(kt0803_cfg.pga_gain > 12)
+    kt0803_cfg.pga_gain = -15;
+  kt0803_set_pga_gain(kt0803_cfg.pga_gain);
+  kt0803_set_ch(kt0803_cfg.freq);
+  kt0803_set_mute(0);
+  return kt0803_cfg.pga_gain + 15;
+}
+
+uint8_t kt0803_prev_vol(bit coarse)
+{
+  if(coarse)
+    kt0803_cfg.pga_gain -= 4;
+  else
+    kt0803_cfg.pga_gain --;
+  if(kt0803_cfg.pga_gain < -15)
+    kt0803_cfg.pga_gain = 12;
+  kt0803_set_pga_gain(kt0803_cfg.pga_gain);
+  kt0803_set_ch(kt0803_cfg.freq);
+  kt0803_set_mute(0);
+  return kt0803_cfg.pga_gain + 15;
+}
+
 // -----------------------------------------------------------------------------
 static uint8_t kt0803_read_reg(uint8_t addr)
 {
@@ -55,7 +301,7 @@ static uint8_t kt0803_get_reg(uint8_t addr, uint8_t bit_index, uint8_t bit_len)
   
   dat = (dat & bit_mask) >> bit_off;
   
-  CDBG("kt0803_get_reg [%02bx][%02bx][%02bx] : [%02bx]\n", addr, bit_index, bit_len, dat);
+  // CDBG("kt0803_get_reg [%02bx][%02bx][%02bx] : [%02bx]\n", addr, bit_index, bit_len, dat);
   
   return dat;
 }
@@ -86,7 +332,7 @@ static void kt0803_set_reg(uint8_t addr, uint8_t bit_index, uint8_t bit_len, uin
   tmp = (tmp & ~bit_mask) | (dat << bit_off);
   kt0803_write_reg(addr, tmp);
   
-  CDBG("kt0803_set_reg [%02bx][%02bx][%02bx] : [%02bx] -> [%02bx]\n", addr, bit_index, bit_len, old_dat, dat);
+  // CDBG("kt0803_set_reg [%02bx][%02bx][%02bx] : [%02bx] -> [%02bx]\n", addr, bit_index, bit_len, old_dat, dat);
 }
 
 /* 
@@ -111,8 +357,6 @@ void kt0803_set_ch(uint16_t ch)
   else if (ch > 1080) ch = 1080;
   
   ch *= 2;
-  
-  CDBG("kt0803_set_ch %04x\n", ch);
   
   kt0803_set_reg(0x2, 7, 1, (ch & 0x1));
   ch >>= 1;
@@ -400,7 +644,7 @@ void kt0803_set_mono(bit enable)
 
 /*
   01111~11111
-  -15dB~12dB
+  ret: -15dB~12dB
 */
 int8_t kt0803_get_pga_gain(void)
 {
@@ -447,6 +691,8 @@ void kt0803_set_pga_gain(int8_t gain)
   } else {
     pga = ((uint8_t)(0 - gain) & 0xF);
   }
+  
+  CDBG("kt0803_set_pga_gain %bd = %02bx\n", gain, pga);
   
   // PGA_LSB[1:0]
   kt0803_set_reg(0x4, 5, 2, (pga & 0x3));
@@ -518,12 +764,12 @@ void kt0803_set_pa_ctl(kt0803_pa_ctl_t ctl)
   0 = Power amplifier power on (default setting) 
   1 = Power amplifier power down
 */
-bit kt0803_get_papd(void)
+bit kt0803_get_pdpa(void)
 {
   return kt0803_get_reg(0xB, 5, 1) ? 1 : 0;
 }
 
-void kt0803_set_papd(bit down)
+void kt0803_set_pdpa(bit down)
 {
   kt0803_set_reg(0xB, 5, 1, down ? 1 : 0);
 }

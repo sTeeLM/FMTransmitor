@@ -26,9 +26,12 @@ void main(void)
   com_initialize();
   power_initialize();
   power_set_enable(1);
-  eerom_initialize();
   
-  tm1650_initialize();  
+  tm1650_initialize(); 
+  
+  eerom_initialize();
+  tm1650_set_brightness(tm1650_cfg.brightness);
+  
   kt0803_initialize();
   
   button_initialize();
@@ -37,27 +40,9 @@ void main(void)
   sm_initialize();
   
   delay_ms(1000);
-  
-  kt0803_set_ch(1000);
-  
-  while(1) {
-    uint8_t sc;
-    delay_ms(1000);
-    tm1650_set_dig(0, 0, i);
-    tm1650_set_dig(1, 0, i);
-    tm1650_set_dig(2, 0, i);
-    tm1650_set_dig(3, 0, i);
-    i = (i + 1);
-    if(i == 'Z')
-      i = '-';
-    sc = tm1650_get_scan_code();
-    CDBG("tm1650_get_scan_code %bx\n", sc);
-    CDBG("kt0803_get_ch %x\n", kt0803_get_ch());
-  }
-  
-  /*
+
   while(1) {
     task_run();
   }
-  */  
+ 
 }

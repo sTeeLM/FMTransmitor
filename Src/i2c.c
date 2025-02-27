@@ -13,6 +13,10 @@ void I2C_Delay()
   _nop_();
   _nop_();
   _nop_();
+  _nop_();
+  _nop_();
+  _nop_();
+  _nop_();  
 }
 
 void I2C_Init()

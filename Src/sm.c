@@ -3,6 +3,7 @@
 #include "debug.h"
 
 #include "sm_trans_fm.h"
+#include "sm_trans_bright.h"
 #include "sm_trans_alc.h"
 #include "sm_trans_sd.h"
 #include "sm_trans_pta.h"
@@ -13,12 +14,14 @@
 #include "sm_trans_bass.h"
 #include "sm_trans_fdd.h"
 #include "sm_trans_afre.h"
+#include "sm_trans_pa.h"
 
 uint8_t sm_cur_function;
 uint8_t sm_cur_state;
 
 /*
   SM_TRANS_FM  = 0,   // 主功能（含频道选择）
+  SM_TRANS_BRIGHT,    // 亮度调节
   SM_TRANS_ALC,       // Automatic Level Control调节
   SM_TRANS_SD,        // Silence Detection
   SM_TRANS_RF_GAIN,   // RF Gain
@@ -29,10 +32,12 @@ uint8_t sm_cur_state;
   SM_TRANS_FDD,       // Frequency Deviation Delection
   SM_TRANS_AFRE,      // Audio Frequency Response Enhancement
   SM_TRANS_SCM,       // Switching Channel Mode Selection
+  SM_TRANS_PA         // Power Amplifier
 */
 static const struct sm_function_slot code sm_function[] =
 {
   {"SM_TRANS_FM", sm_function_trans_fm},
+  {"SM_TRANS_BRIGHT", sm_function_trans_bright},
   {"SM_TRANS_ALC", sm_function_trans_alc}, 
   {"SM_TRANS_SD", sm_function_trans_sd},
   {"SM_TRANS_RF_GAIN", sm_function_trans_rf_gain},
@@ -42,7 +47,8 @@ static const struct sm_function_slot code sm_function[] =
   {"SM_TRANS_BASS", sm_function_trans_bass},
   {"SM_TRANS_FDD", sm_function_trans_fdd},
   {"SM_TRANS_AFRE", sm_function_trans_afre}, 
-  {"SM_TRANS_SCM", sm_function_trans_scm}  
+  {"SM_TRANS_SCM", sm_function_trans_scm},
+  {"SM_TRANS_PA", sm_function_trans_pa},  
 };
 
 uint8_t sm_cur_function;
