@@ -384,4 +384,34 @@ uint8_t kt0803_get_vol(void);
 uint8_t kt0803_next_vol(bit coarse);
 uint8_t kt0803_prev_vol(bit coarse);
 
+kt0803_alc_delay_t kt0803_next_alc_delay(void);
+kt0803_alc_delay_t kt0803_prev_alc_delay(void);
+
+kt0803_alc_attack_t kt0803_next_alc_attack(void);
+kt0803_alc_attack_t kt0803_prev_alc_attack(void);
+
+kt0803_alc_hold_t kt0803_next_alc_hold(void);
+kt0803_alc_hold_t kt0803_prev_alc_hold(void);
+
+kt0803_alc_high_th_t kt0803_next_alc_high_th(void);
+kt0803_alc_high_th_t kt0803_prev_alc_high_th(void);
+
+kt0803_alc_low_th_t kt0803_next_alc_low_th(void);
+kt0803_alc_low_th_t kt0803_prev_alc_low_th(void);
+
+kt0803_alc_comp_gain_t kt0803_next_alc_comp_gain(void);
+kt0803_alc_comp_gain_t kt0803_prev_alc_comp_gain(void);
+
+kt0803_slncthh_t kt0803_next_slncthh(void);
+kt0803_slncthh_t kt0803_prev_slncthh(void);
+
+kt0803_slncthl_t kt0803_next_slncthl(void);
+kt0803_slncthl_t kt0803_prev_slncthl(void);
+
+kt0803_slnccnt_high_t kt0803_next_slnccnt_high(void);
+kt0803_slnccnt_high_t kt0803_prev_slnccnt_high(void);
+
+kt0803_slnccnt_low_t kt0803_next_slnccnt_low(void);
+kt0803_slnccnt_low_t kt0803_prev_slnccnt_low(void);
+
 #endif

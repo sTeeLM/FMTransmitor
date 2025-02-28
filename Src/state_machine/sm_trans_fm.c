@@ -11,6 +11,20 @@
 #include "eerom.h"
 #include "power.h"
 
+#include "sm_trans_alc.h"
+#include "sm_trans_sd.h"
+#include "sm_trans_pa.h"
+#include "sm_trans_rf_gain.h"
+#include "sm_trans_ptc.h"
+#include "sm_trans_stereo.h"
+#include "sm_trans_fdd.h"
+#include "sm_trans_bass.h"
+#include "sm_trans_afre.h"
+#include "sm_trans_scm.h"
+#include "sm_trans_pta.h"
+#include "sm_trans_bright.h"
+
+
 void do_trans_fm_init(uint8_t to_func, uint8_t to_state, enum task_events ev)
 {
   tm1650_clear();
@@ -135,19 +149,17 @@ static void do_trans_fm_menu(uint8_t to_func, uint8_t to_state, enum task_events
       trans_fm_main_menu = FM_MENU_ITEM - 1;
   } else if(ev == EV_KEY_OK_PRESS) {
     /* task_set(xx) */
+    task_set(trans_fm_main_menu + EV_MENU_ALC);
   }
   
   trans_fm_main_display_menu(trans_fm_main_menu);
 }
 
-static void do_trans_fm_pwoff(uint8_t to_func, uint8_t to_state, enum task_events ev)
+void do_trans_fm_pwoff(uint8_t to_func, uint8_t to_state, enum task_events ev)
 {
   tm1650_clear();
   if(ev == EV_KEY_POWER_PRESS) {
-    tm1650_set_dig(0, 0, ' ');
-    tm1650_set_dig(1, 0, 'O'); 
-    tm1650_set_dig(2, 0, 'F');
-    tm1650_set_dig(3, 0, 'F');
+    tm1650_set_str(" OFF");
     eerom_save_config();
     delay_ms(1000);
     power_set_enable(0);
@@ -186,6 +198,21 @@ static const struct sm_trans_slot code  sm_trans_fm_menu[] = {
   {EV_KEY_NEG_PRESS, SM_TRANS_FM, SM_TRANS_FM_MENU, do_trans_fm_menu},  // prev menu item
   {EV_KEY_MENU_PRESS, SM_TRANS_FM, SM_TRANS_FM_MAIN, do_trans_fm_main}, // return main
   {EV_KEY_OK_PRESS, SM_TRANS_FM, SM_TRANS_FM_MENU, do_trans_fm_menu},   // select
+  
+  /* Menu Items */
+  {EV_MENU_ALC, SM_TRANS_ALC, SM_TRANS_ALC_INIT, do_trans_alc_init},  
+  {EV_MENU_SD, SM_TRANS_SD, SM_TRANS_SD_INIT, do_trans_sd_init},
+  {EV_MENU_PA, SM_TRANS_PA, SM_TRANS_PA_INIT, do_trans_pa_init}, 
+  {EV_MENU_RFG, SM_TRANS_RF_GAIN, SM_TRANS_RF_GAIN_INIT, do_trans_rf_gain_init},
+  {EV_MENU_PTC, SM_TRANS_PTC, SM_TRANS_PTC_INIT, do_trans_ptc_init},
+  {EV_MENU_STER, SM_TRANS_STEREO, SM_TRANS_STEREO_INIT, do_trans_stereo_init},
+  {EV_MENU_BASS, SM_TRANS_BASS, SM_TRANS_BASS_INIT, do_trans_bass_init},
+  {EV_MENU_FDD, SM_TRANS_FDD, SM_TRANS_FDD_INIT, do_trans_fdd_init},
+  {EV_MENU_AFRE, SM_TRANS_AFRE, SM_TRANS_AFRE_INIT, do_trans_afre_init},
+  {EV_MENU_SCM, SM_TRANS_SCM, SM_TRANS_SCM_INIT, do_trans_scm_init},
+  {EV_MENU_PTA, SM_TRANS_PTA, SM_TRANS_PTA_INIT, do_trans_pta_init}, 
+  {EV_MENU_BR, SM_TRANS_BRIGHT, SM_TRANS_BRIGHT_INIT, do_trans_bright_init},  
+  
   {NULL, NULL, NULL, NULL}
 };
 

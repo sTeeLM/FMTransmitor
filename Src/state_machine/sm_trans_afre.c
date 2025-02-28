@@ -7,7 +7,7 @@
 #include "gpio.h"
 #include "delay.h"
 
-static void do_trans_afre_init(uint8_t to_func, uint8_t to_state, enum task_events ev)
+void do_trans_afre_init(uint8_t to_func, uint8_t to_state, enum task_events ev)
 {
   
 }

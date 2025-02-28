@@ -26,6 +26,19 @@
   EV_KEY_MENU_PRESS      = 12, // Menu键按下
   EV_KEY_MENU_LPRESS     = 13, // Menu键长按
   EV_KEY_UP              = 14, // 按键抬起
+  
+  EV_MENU_ALC,
+  EV_MENU_SD,
+  EV_MENU_PA,
+  EV_MENU_RFG,
+  EV_MENU_PTC, 
+  EV_MENU_STER, 
+  EV_MENU_BASS,
+  EV_MENU_FDD,
+  EV_MENU_AFRE, 
+  EV_MENU_SCM,
+  EV_MENU_PTA,
+  EV_MENU_BR, 
   EV_CNT  
 */
 
@@ -45,7 +58,19 @@ const char * code task_names[] =
   "EV_KEY_OK_LPRESS", 
   "EV_KEY_MENU_PRESS",
   "EV_KEY_MENU_LPRESS", 
-  "EV_KEY_UP",     
+  "EV_KEY_UP",
+  "EV_MENU_ALC", 
+  "EV_MENU_SD", 
+  "EV_MENU_PA", 
+  "EV_MENU_RFG",
+  "EV_MENU_PTC", 
+  "EV_MENU_STER",
+  "EV_MENU_BASS",
+  "EV_MENU_FDD",
+  "EV_MENU_AFRE",
+  "EV_MENU_SCM",
+  "EV_MENU_PTA", 
+  "EV_MENU_BR",   
 };
 
 static void null_proc(enum task_events ev)

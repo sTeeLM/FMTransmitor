@@ -27,4 +27,6 @@ void tm1650_set_dig(uint8_t index, bit dp, uint8_t dat);
 uint8_t tm1650_get_scan_code(void);
 void tm1650_clear(void);
 void tm1650_set_str(const char * str);
+void tm1650_clr_dp(void);
+void tm1650_set_dp(uint8_t dp);
 #endif

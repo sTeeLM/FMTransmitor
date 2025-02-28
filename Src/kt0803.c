@@ -13,7 +13,7 @@ void kt0803_factory_reset(void)
   kt0803_cfg.flag = 0;
   
   // Automatic Level Control: disabled
-  kt0803_cfg.flag &= ~ KT0803_CFG_FLAG_ALC_ENABLE; 
+  kt0803_cfg.flag &= ~KT0803_CFG_FLAG_ALC_ENABLE; 
   kt0803_cfg.alc_delay = (uint8_t)KT0803_ALC_DELAY_25US;
   kt0803_cfg.alc_attack = (uint8_t)KT0803_ALC_ATTACK_25US;
   kt0803_cfg.alc_comp_gain = (uint8_t)KT0803_ALC_COMP_GAIN_N3DB;
@@ -257,6 +257,126 @@ uint8_t kt0803_prev_vol(bit coarse)
   kt0803_set_ch(kt0803_cfg.freq);
   kt0803_set_mute(0);
   return kt0803_cfg.pga_gain + 15;
+}
+typedef void (*KT0803_VALUE_PROC)(uint8_t dat);
+
+static uint8_t kt0803_next_value(KT0803_VALUE_PROC proc, uint8_t * val, uint8_t min, uint8_t max)
+{
+  (*val) ++;
+  if(*val > max)
+    *val = min;
+  proc(*val);
+  return *val;
+}
+
+static uint8_t kt0803_prev_value(KT0803_VALUE_PROC proc, uint8_t * val, uint8_t min, uint8_t max)
+{
+  if(*val == min)
+    *val = max;
+  else
+    (*val) --;
+  proc(*val);
+  return *val;
+}
+
+kt0803_alc_delay_t kt0803_next_alc_delay(void)
+{
+  return kt0803_next_value(kt0803_set_alc_delay, &kt0803_cfg.alc_delay, KT0803_ALC_DELAY_25US, KT0803_ALC_DELAY_400MS);
+}
+
+kt0803_alc_delay_t kt0803_prev_alc_delay(void)
+{
+  return kt0803_prev_value(kt0803_set_alc_delay, &kt0803_cfg.alc_delay, KT0803_ALC_DELAY_25US, KT0803_ALC_DELAY_400MS);
+}
+
+kt0803_alc_attack_t kt0803_next_alc_attack(void)
+{
+  return kt0803_next_value(kt0803_set_alc_attack, &kt0803_cfg.alc_attack, KT0803_ALC_ATTACK_25US, KT0803_ALC_ATTACK_400MS);
+}
+
+kt0803_alc_attack_t kt0803_prev_alc_attack(void)
+{
+  return kt0803_prev_value(kt0803_set_alc_attack, &kt0803_cfg.alc_attack, KT0803_ALC_ATTACK_25US, KT0803_ALC_ATTACK_400MS);
+}
+
+kt0803_alc_hold_t kt0803_next_alc_hold(void)
+{
+  return kt0803_next_value(kt0803_set_alc_hold, &kt0803_cfg.alc_hold, KT0803_ALC_HOLD_50MS, KT0803_ALC_HOLD_15S);
+}
+
+kt0803_alc_hold_t kt0803_prev_alc_hold(void)
+{
+  return kt0803_prev_value(kt0803_set_alc_hold, &kt0803_cfg.alc_hold, KT0803_ALC_HOLD_50MS, KT0803_ALC_HOLD_15S);
+}
+
+kt0803_alc_high_th_t kt0803_next_alc_high_th(void)
+{
+  return kt0803_next_value(kt0803_set_alc_high_th, &kt0803_cfg.alc_high_th, KT0803_ALC_HIGH_TH_0P6, KT0803_ALC_HIGH_TH_0P01);
+}
+
+kt0803_alc_high_th_t kt0803_prev_alc_high_th(void)
+{
+  return kt0803_prev_value(kt0803_set_alc_high_th, &kt0803_cfg.alc_high_th, KT0803_ALC_HIGH_TH_0P6, KT0803_ALC_HIGH_TH_0P01);
+}
+
+kt0803_alc_low_th_t kt0803_next_alc_low_th(void)
+{
+  return kt0803_next_value(kt0803_set_alc_low_th, &kt0803_cfg.alc_low_th, KT0803_ALC_LOW_TH_0P25, KT0803_ALC_LOW_TH_0P0001);
+}
+
+kt0803_alc_low_th_t kt0803_prev_alc_low_th(void)
+{
+  return kt0803_prev_value(kt0803_set_alc_low_th, &kt0803_cfg.alc_low_th, KT0803_ALC_LOW_TH_0P25, KT0803_ALC_LOW_TH_0P0001);
+}
+
+kt0803_alc_comp_gain_t kt0803_next_alc_comp_gain(void)
+{
+  return kt0803_next_value(kt0803_set_alc_comp_gain, &kt0803_cfg.alc_comp_gain, KT0803_ALC_COMP_GAIN_N6DB, KT0803_ALC_COMP_GAIN_N3DB);
+}
+
+kt0803_alc_comp_gain_t kt0803_prev_alc_comp_gain(void)
+{
+  return kt0803_prev_value(kt0803_set_alc_comp_gain, &kt0803_cfg.alc_comp_gain, KT0803_ALC_COMP_GAIN_N6DB, KT0803_ALC_COMP_GAIN_N3DB);
+}
+
+kt0803_slncthh_t kt0803_next_slncthh(void)
+{
+  return kt0803_next_value(kt0803_set_slncthh, &kt0803_cfg.slncthh, KT0803_SLNCTHH_050MV, KT0803_SLNCTHH_64MV);
+}
+
+kt0803_slncthh_t kt0803_prev_slncthh(void)
+{
+  return kt0803_prev_value(kt0803_set_slncthh, &kt0803_cfg.slncthh, KT0803_SLNCTHH_050MV, KT0803_SLNCTHH_64MV);
+}
+
+kt0803_slncthl_t kt0803_next_slncthl(void)
+{
+  return kt0803_next_value(kt0803_set_slncthl, &kt0803_cfg.slncthl, KT0803_SLNCTHL_025MV, KT0803_SLNCTHL_32MV);
+}
+
+kt0803_slncthl_t kt0803_prev_slncthl(void)
+{
+  return kt0803_prev_value(kt0803_set_slncthl, &kt0803_cfg.slncthl, KT0803_SLNCTHL_025MV, KT0803_SLNCTHL_32MV);
+}
+
+kt0803_slnccnt_high_t kt0803_next_slnccnt_high(void)
+{
+  return kt0803_next_value(kt0803_set_slnccnt_high, &kt0803_cfg.slnccnt_high, KT0803_SLNCCNT_HIGH_15, KT0803_SLNCCNT_HIGH_2047);
+}
+
+kt0803_slnccnt_high_t kt0803_prev_slnccnt_high(void)
+{
+  return kt0803_prev_value(kt0803_set_slnccnt_high, &kt0803_cfg.slnccnt_high, KT0803_SLNCCNT_HIGH_15, KT0803_SLNCCNT_HIGH_2047);
+}
+
+kt0803_slnccnt_low_t kt0803_next_slnccnt_low(void)
+{
+  return kt0803_next_value(kt0803_set_slnccnt_low, &kt0803_cfg.slnccnt_low, KT0803_SLNCCNT_LOW_1, KT0803_SLNCCNT_LOW_128);
+}
+
+kt0803_slnccnt_low_t kt0803_prev_slnccnt_low(void)
+{
+  return kt0803_prev_value(kt0803_set_slnccnt_low, &kt0803_cfg.slnccnt_low, KT0803_SLNCCNT_LOW_1, KT0803_SLNCCNT_LOW_128);
 }
 
 // -----------------------------------------------------------------------------

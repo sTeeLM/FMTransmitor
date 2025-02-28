@@ -21,6 +21,19 @@ enum task_events
   EV_KEY_MENU_PRESS      = 12, // Menu键按下
   EV_KEY_MENU_LPRESS     = 13, // Menu键长按
   EV_KEY_UP              = 14, // 按键抬起
+  /* MENU */
+  EV_MENU_ALC,
+  EV_MENU_SD,
+  EV_MENU_PA,
+  EV_MENU_RFG,
+  EV_MENU_PTC, 
+  EV_MENU_STER, 
+  EV_MENU_BASS,
+  EV_MENU_FDD,
+  EV_MENU_AFRE, 
+  EV_MENU_SCM,
+  EV_MENU_PTA,
+  EV_MENU_BR, 
   EV_CNT  
 };
 
