@@ -44,33 +44,33 @@
 
 const char * code task_names[] =
 {
-  "EV_INIT",
-  "EV_KEY_SCAN", 
-  "EV_TIMEO",  
-  "EV_250MS",
-  "EV_1S",
-  "EV_KEY_POWER_PRESS",
-  "EV_KEY_PLUS_PRESS",
-  "EV_KEY_PLUS_LPRESS",
-  "EV_KEY_NEG_PRESS",
-  "EV_KEY_NEG_LPRESS", 
-  "EV_KEY_OK_PRESS",
-  "EV_KEY_OK_LPRESS", 
-  "EV_KEY_MENU_PRESS",
-  "EV_KEY_MENU_LPRESS", 
-  "EV_KEY_UP",
-  "EV_MENU_ALC", 
-  "EV_MENU_SD", 
-  "EV_MENU_PA", 
-  "EV_MENU_RFG",
-  "EV_MENU_PTC", 
-  "EV_MENU_STER",
-  "EV_MENU_BASS",
-  "EV_MENU_FDD",
-  "EV_MENU_AFRE",
-  "EV_MENU_SCM",
-  "EV_MENU_PTA", 
-  "EV_MENU_BR",   
+  "INIT",
+  "KS", 
+  "TIMEO",  
+  "250MS",
+  "1S",
+  "POWER_P",
+  "PLUS_P",
+  "PLUS_LP",
+  "NEG_P",
+  "NEG_LP", 
+  "OK_P",
+  "OK_LP", 
+  "M_P",
+  "M_LP", 
+  "M_ALC", 
+  "M_SD", 
+  "M_PA", 
+  "M_RFG",
+  "M_STER",
+  "M_BR",  
+  "M_PTC", 
+  "M_BASS",
+  "M_FDD",
+  "M_AFRE",
+  "M_SCM",
+  "M_PTA", 
+  "KEY_UP",  
 };
 
 static void null_proc(enum task_events ev)
@@ -96,7 +96,19 @@ static const TASK_PROC task_procs[EV_CNT] =
   button_proc,
   button_proc,
   button_proc,
-  button_proc,
+  null_proc,
+  null_proc,
+  null_proc,
+  null_proc,
+  null_proc,
+  null_proc,
+  null_proc,
+  null_proc, 
+  null_proc,
+  null_proc,
+  null_proc,
+  null_proc,
+  button_proc,  
 };
 
 
@@ -105,7 +117,6 @@ uint16_t ev_bits1;
 
 void task_initialize (void)
 {
-  CDBG("task_initialize\n");
   ev_bits0 = 0;
   ev_bits1 = 0;
 }

@@ -8,6 +8,7 @@
 enum sm_states_trans_scm
 {
   SM_TRANS_SCM_INIT,
+  SM_TRANS_SCM_MAIN,
 };
 
 const struct sm_state_slot code sm_function_trans_scm[];

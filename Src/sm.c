@@ -36,19 +36,19 @@ uint8_t sm_cur_state;
 */
 static const struct sm_function_slot code sm_function[] =
 {
-  {"SM_TRANS_FM", sm_function_trans_fm},
-  {"SM_TRANS_BRIGHT", sm_function_trans_bright},
-  {"SM_TRANS_ALC", sm_function_trans_alc}, 
-  {"SM_TRANS_SD", sm_function_trans_sd},
-  {"SM_TRANS_RF_GAIN", sm_function_trans_rf_gain},
-  {"SM_TRANS_PTA", sm_function_trans_pta}, 
-  {"SM_TRANS_PTC", sm_function_trans_ptc},
-  {"SM_TRANS_STEREO", sm_function_trans_stereo}, 
-  {"SM_TRANS_BASS", sm_function_trans_bass},
-  {"SM_TRANS_FDD", sm_function_trans_fdd},
-  {"SM_TRANS_AFRE", sm_function_trans_afre}, 
-  {"SM_TRANS_SCM", sm_function_trans_scm},
-  {"SM_TRANS_PA", sm_function_trans_pa},  
+  {"FM", sm_function_trans_fm},
+  {"BRIGHT", sm_function_trans_bright},
+  {"ALC", sm_function_trans_alc}, 
+  {"SD", sm_function_trans_sd},
+  {"RF_GAIN", sm_function_trans_rf_gain},
+  {"PTA", sm_function_trans_pta}, 
+  {"PTC", sm_function_trans_ptc},
+  {"STEREO", sm_function_trans_stereo}, 
+  {"BASS", sm_function_trans_bass},
+  {"FDD", sm_function_trans_fdd},
+  {"AFRE", sm_function_trans_afre}, 
+  {"SCM", sm_function_trans_scm},
+  {"PA", sm_function_trans_pa},  
 };
 
 uint8_t sm_cur_function;
@@ -56,33 +56,6 @@ uint8_t sm_cur_state;
 
 void sm_initialize(void)
 {
-  CDBG(("sm_initialize\n"));
-  sm_cur_function = SM_TRANS_FM;
-  sm_cur_state = SM_TRANS_FM_INIT;
-  task_set(EV_INIT);
-}
-
-void sm_enter_shell(void)
-{
-  CDBG(("sm_enter_shell\n"));
-}
-
-void sm_leave_shell(void)
-{
-  CDBG(("sm_leave_shell\n"));
-  sm_cur_function = SM_TRANS_FM;
-  sm_cur_state = SM_TRANS_FM_INIT;
-  task_set(EV_INIT);
-}
-
-void sm_enter_control(void)
-{
-  CDBG(("sm_enter_control\n"));
-}
-
-void sm_leave_control(void)
-{
-  CDBG(("sm_leave_control\n"));
   sm_cur_function = SM_TRANS_FM;
   sm_cur_state = SM_TRANS_FM_INIT;
   task_set(EV_INIT);

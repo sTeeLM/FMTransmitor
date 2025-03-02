@@ -67,13 +67,11 @@ static unsigned char code tm1650_display_code[] =
 
 void tm1650_factory_reset(void)
 {
-  tm1650_cfg.brightness = 7;
+  tm1650_cfg.brightness = 0;
 }
 
 void tm1650_initialize(void)
 {
-  CDBG("kt0803 kt0803_initialize\n");
-  
   tm1650_display_mode = 0;
   tm1650_set_mod(TM1650_MOD_8_DIG);
   tm1650_set_brightness(7);
@@ -91,19 +89,26 @@ void tm1650_clear(void)
 
 void tm1650_set_str(const char * str)
 {
-  tm1650_set_dig(0, 0, str[0]);
-  tm1650_set_dig(1, 0, str[1]); 
-  tm1650_set_dig(2, 0, str[2]);
-  tm1650_set_dig(3, 0, str[3]); 
+  tm1650_set_dig(3, 0, str[0]);
+  tm1650_set_dig(2, 0, str[1]); 
+  tm1650_set_dig(1, 0, str[2]);
+  tm1650_set_dig(0, 0, str[3]); 
 }
 
 static void tm1650_set_data(uint8_t index, uint8_t dat);
+static void tm1650_refresh(void);
+
 void tm1650_clr_dp(void)
 {
   tm1650_data[0] &= 0x7F;
   tm1650_data[1] &= 0x7F; 
   tm1650_data[2] &= 0x7F;
   tm1650_data[3] &= 0x7F; 
+  tm1650_refresh(); 
+}
+
+static void tm1650_refresh(void)
+{
   tm1650_set_data(0, tm1650_data[0]);
   tm1650_set_data(1, tm1650_data[1]); 
   tm1650_set_data(2, tm1650_data[2]);
@@ -113,9 +118,9 @@ void tm1650_clr_dp(void)
 void tm1650_set_dp(uint8_t dp)
 {
   dp %= 4;
-  dp = 3 - dp;
   tm1650_data[dp] |= 0x80; 
-  tm1650_set_data(dp, tm1650_data[dp]);
+  
+  tm1650_set_data(3 - dp, tm1650_data[dp]);
 }
 
 void tm1650_set_mod(tm1650_mod_t mod)
@@ -137,11 +142,32 @@ void tm1650_set_brightness(uint8_t brightness)
   brightness &= 0x7;
   tm1650_display_mode &= 0x8F;
   tm1650_display_mode |= (brightness << 4);
+  tm1650_refresh();
 }
 
 uint8_t tm1650_get_brightness(void)
 {
   return ((tm1650_display_mode & (~0x8F)) >> 4);
+}
+
+uint8_t tm1650_next_brightness(void)
+{
+  uint8_t br = tm1650_get_brightness();
+  br = ( ++ br) % 8;
+  tm1650_set_brightness(br);
+  return br;
+  
+}
+
+uint8_t tm1650_prev_brightness(void)
+{
+  uint8_t br = tm1650_get_brightness();
+  if(br == 0)
+    br = 7;
+  else
+    br --;
+  tm1650_set_brightness(br);
+  return br;
 }
 
 void tm1650_enable_display(bit enable)
@@ -189,7 +215,7 @@ void tm1650_set_dig(uint8_t index, bit dp, uint8_t dat)
 {
   uint8_t val = 0;
   index %= 4;
-  index = 3 - index;
+  
 
   if(dat == 0) {
     val = tm1650_display_code[0];
@@ -205,6 +231,7 @@ void tm1650_set_dig(uint8_t index, bit dp, uint8_t dat)
   
   tm1650_data[index] = val;
   
+  //index = 3 - index;
   /* write to chip! */
   tm1650_set_data(index, val);
 }

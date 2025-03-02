@@ -23,11 +23,11 @@
 #define KT0803_CFG_FLAG_SLNCDIS     0x10
 #define KT0803_CFG_FLAG_PLTADJ      0x20  // PTA
 #define KT0803_CFG_FLAG_PHTCNST     0x40  // PTC
-#define KT0803_CFG_FLAG_STEREO      0x80  // Stereo or Mono
+#define KT0803_CFG_FLAG_MONO        0x80  // Stereo or Mono
 #define KT0803_CFG_FLAG_FDD         0x100 // Frequency Deviation Delection
 #define KT0803_CFG_FLAG_AFRE        0x200 // Audio Frequency Response Enhancement
 #define KT0803_CFG_FLAG_SCM         0x300 // Switching Channel Mode Selection
-#define KT0803_CFG_FLAG_MUTE        0x80  // Mute
+#define KT0803_CFG_FLAG_MUTE        0x400 // Mute
 
 typedef struct _kt0803_cfg_t
 {
@@ -413,5 +413,11 @@ kt0803_slnccnt_high_t kt0803_prev_slnccnt_high(void);
 
 kt0803_slnccnt_low_t kt0803_next_slnccnt_low(void);
 kt0803_slnccnt_low_t kt0803_prev_slnccnt_low(void);
+
+kt0803_rf_gain_t kt0803_next_rf_gain(void);
+kt0803_rf_gain_t kt0803_prev_rf_gain(void);
+
+kt0803_bass_t kt0803_next_bass(void);
+kt0803_bass_t kt0803_prev_bass(void);
 
 #endif

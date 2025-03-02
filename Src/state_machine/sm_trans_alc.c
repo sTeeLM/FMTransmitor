@@ -24,11 +24,11 @@ static void do_trans_alc_onoff(uint8_t to_func, uint8_t to_state, enum task_even
   }
   
   if(ev == EV_KEY_PLUS_PRESS || ev == EV_KEY_NEG_PRESS) {
-    bit onoff = kt0803_cfg.flag & KT0803_CFG_FLAG_ALC_ENABLE ? 1 : 0;
+    bit enable = kt0803_get_alc_enable();
     kt0803_cfg.flag &= ~KT0803_CFG_FLAG_ALC_ENABLE;
-    kt0803_cfg.flag |= onoff ? 0 : 1;
-    tm1650_set_str(onoff ? "  OFF" : " ON");
-    kt0803_set_alc_enable(!onoff);
+    kt0803_cfg.flag |= enable ? 0 : KT0803_CFG_FLAG_ALC_ENABLE;
+    tm1650_set_str(enable ? " OFF" : "  ON");
+    kt0803_set_alc_enable(!enable);
   }
 }
 
@@ -56,7 +56,7 @@ static void trans_fm_main_display_delay_attack(uint8_t value)
   tm1650_set_str(str);
 }
 
-static void trans_fm_main_display_delay(kt0803_alc_delay_t delay)
+static void trans_fm_main_display_delay(uint8_t delay)
 {
   trans_fm_main_display_delay_attack(delay);
 }
@@ -77,7 +77,7 @@ static void do_trans_alc_delay(uint8_t to_func, uint8_t to_state, enum task_even
   }
 }
 
-static void trans_fm_main_display_attack(kt0803_alc_attack_t attack)
+static void trans_fm_main_display_attack(uint8_t attack)
 {
   trans_fm_main_display_delay_attack(attack);
 }
@@ -208,14 +208,14 @@ static void trans_fm_main_display_comp_gain(kt0803_alc_comp_gain_t comp_gain)
 {
   const char * str = "    ";
   switch(comp_gain) {
-    case KT0803_ALC_COMP_GAIN_N6DB:  str=" -6d"; break;
-    case KT0803_ALC_COMP_GAIN_N9DB:  str=" -9d"; break;
-    case KT0803_ALC_COMP_GAIN_N12DB: str="-12d"; break;
-    case KT0803_ALC_COMP_GAIN_N15DB: str="-15d"; break; 
-    case KT0803_ALC_COMP_GAIN_6DB:   str="  6d"; break; 
-    case KT0803_ALC_COMP_GAIN_3DB:   str="  3d"; break; 
-    case KT0803_ALC_COMP_GAIN_0DB:   str="  0d"; break; 
-    case KT0803_ALC_COMP_GAIN_N3DB:  str=" -3d"; break;  
+    case KT0803_ALC_COMP_GAIN_N6DB:  str=" -6D"; break;
+    case KT0803_ALC_COMP_GAIN_N9DB:  str=" -9D"; break;
+    case KT0803_ALC_COMP_GAIN_N12DB: str="-12D"; break;
+    case KT0803_ALC_COMP_GAIN_N15DB: str="-15D"; break; 
+    case KT0803_ALC_COMP_GAIN_6DB:   str="  6D"; break; 
+    case KT0803_ALC_COMP_GAIN_3DB:   str="  3D"; break; 
+    case KT0803_ALC_COMP_GAIN_0DB:   str="  0D"; break; 
+    case KT0803_ALC_COMP_GAIN_N3DB:  str=" -3D"; break;  
   }
   tm1650_set_str(str);
 }
@@ -298,12 +298,12 @@ static const struct sm_trans_slot code  sm_trans_alc_comp_gain[] = {
 };
 
 const struct sm_state_slot code sm_function_trans_alc[] = {
-  {"SM_TRANS_ALC_INIT", sm_trans_alc_init},
-  {"SM_TRANS_ALC_ONOFF", sm_trans_alc_onoff},
-  {"SM_TRANS_ALC_DELAY", sm_trans_alc_delay}, 
-  {"SM_TRANS_ALC_ATTACK", sm_trans_alc_attack}, 
-  {"SM_TRANS_ALC_HOLD", sm_trans_alc_hold}, 
-  {"SM_TRANS_ALC_HIGH", sm_trans_alc_high},
-  {"SM_TRANS_ALC_LOW", sm_trans_alc_low},  
-  {"SM_TRANS_ALC_COMP_GAIN", sm_trans_alc_comp_gain},   
+  {"INIT", sm_trans_alc_init},
+  {"ONOFF", sm_trans_alc_onoff},
+  {"DELAY", sm_trans_alc_delay}, 
+  {"ATTACK", sm_trans_alc_attack}, 
+  {"HOLD", sm_trans_alc_hold}, 
+  {"HIGH", sm_trans_alc_high},
+  {"LOW", sm_trans_alc_low},  
+  {"COMP_GAIN", sm_trans_alc_comp_gain},   
 };

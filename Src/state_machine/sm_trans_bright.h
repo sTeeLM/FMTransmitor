@@ -8,6 +8,7 @@
 enum sm_states_trans_bright
 {
   SM_TRANS_BRIGHT_INIT,
+  SM_TRANS_BRIGHT_MAIN,  
 };
 
 const struct sm_state_slot code sm_function_trans_bright[];

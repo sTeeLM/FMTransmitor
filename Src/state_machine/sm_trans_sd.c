@@ -20,14 +20,14 @@ void do_trans_sd_init(uint8_t to_func, uint8_t to_state, enum task_events ev)
 static void do_trans_sd_onoff(uint8_t to_func, uint8_t to_state, enum task_events ev)
 {
   if(to_func != sm_cur_function || to_state != sm_cur_state) {
-    tm1650_set_str(kt0803_cfg.flag & KT0803_CFG_FLAG_SLNCDIS ? " OFF" : " ON");
+    tm1650_set_str(kt0803_cfg.flag & KT0803_CFG_FLAG_SLNCDIS ? " OFF" : "  ON");
     return;
   }
   
   if(ev == EV_KEY_PLUS_PRESS || ev == EV_KEY_NEG_PRESS) {
     bit disable = kt0803_cfg.flag & KT0803_CFG_FLAG_SLNCDIS ? 1 : 0;
     kt0803_cfg.flag &= ~KT0803_CFG_FLAG_SLNCDIS;
-    kt0803_cfg.flag |= disable ? 0 : 1;
+    kt0803_cfg.flag |= disable ? 0 : KT0803_CFG_FLAG_SLNCDIS;
     tm1650_set_str(disable ? "  ON" : " OFF");
     kt0803_set_slncdis(!disable);
   }
@@ -210,10 +210,10 @@ static const struct sm_trans_slot code  sm_trans_sd_ctl[] = {
 };
 
 const struct sm_state_slot code sm_function_trans_sd[] = {
-  {"SM_TRANS_SD_INIT", sm_trans_sd_init},
-  {"SM_TRANS_SD_ONOFF", sm_trans_sd_onoff},
-  {"SM_TRANS_SD_THH", sm_trans_sd_thh},
-  {"SM_TRANS_SD_THL", sm_trans_sd_thl},
-  {"SM_TRANS_SD_CTH", sm_trans_sd_cth},
-  {"SM_TRANS_SD_CTL", sm_trans_sd_ctl},  
+  {"INIT", sm_trans_sd_init},
+  {"ONOFF", sm_trans_sd_onoff},
+  {"THH", sm_trans_sd_thh},
+  {"THL", sm_trans_sd_thl},
+  {"CTH", sm_trans_sd_cth},
+  {"CTL", sm_trans_sd_ctl},  
 };

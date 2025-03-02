@@ -15,7 +15,6 @@ static bit button_lpress_sent;
 
 void button_initialize (void)
 {
-  CDBG("button_initialize\n");
   button_power_key_down_cnt = 0;
   button_key_down_cnt = 0;
   button_prev_key_code = 0;
@@ -78,6 +77,7 @@ void button_scan_proc(enum task_events ev)
 
 void button_proc(enum task_events ev)
 {
+  /*
   switch(ev) {
     case EV_KEY_POWER_PRESS:
       CDBG("EV_KEY_POWER_PRESS\n"); break;
@@ -102,5 +102,6 @@ void button_proc(enum task_events ev)
     default:
       CDBG("button_proc unknown ev %bu\n", ev); break;
   }
+  */
   sm_run(ev);
 }

@@ -21,6 +21,9 @@ void tm1650_initialize(void);
 void tm1650_set_mod(tm1650_mod_t mod);
 tm1650_mod_t tm1650_get_mod(void);
 void tm1650_set_brightness(uint8_t brightness);
+uint8_t tm1650_next_brightness(void);
+uint8_t tm1650_prev_brightness(void);
+
 uint8_t tm1650_get_brightness(void);
 void tm1650_enable_display(bit enable);
 void tm1650_set_dig(uint8_t index, bit dp, uint8_t dat);
@@ -29,4 +32,6 @@ void tm1650_clear(void);
 void tm1650_set_str(const char * str);
 void tm1650_clr_dp(void);
 void tm1650_set_dp(uint8_t dp);
+
+
 #endif

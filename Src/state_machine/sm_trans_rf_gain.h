@@ -8,6 +8,7 @@
 enum sm_states_trans_rf_gain
 {
   SM_TRANS_RF_GAIN_INIT,
+  SM_TRANS_RF_GAIN_MAIN
 };
 
 const struct sm_state_slot code sm_function_trans_rf_gain[];

@@ -8,6 +8,7 @@
 enum sm_states_trans_fdd
 {
   SM_TRANS_FDD_INIT,
+  SM_TRANS_FDD_MAIN,  
 };
 
 const struct sm_state_slot code sm_function_trans_fdd[];

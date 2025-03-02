@@ -8,6 +8,9 @@
 enum sm_states_trans_pa
 {
   SM_TRANS_PA_INIT,
+  SM_TRANS_PA_PDPA,
+  SM_TRANS_PA_PADN, 
+  SM_TRANS_PA_BIAS 
 };
 
 const struct sm_state_slot code sm_function_trans_pa[];

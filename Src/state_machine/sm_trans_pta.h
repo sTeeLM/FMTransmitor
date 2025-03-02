@@ -8,6 +8,7 @@
 enum sm_states_trans_pta
 {
   SM_TRANS_PTA_INIT,
+  SM_TRANS_PTA_MAIN,
 };
 
 const struct sm_state_slot code sm_function_trans_pta[];

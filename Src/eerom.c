@@ -69,7 +69,6 @@ static bit eerom_is_factory_reset(void)
 
 void eerom_initialize (void)
 {
-  CDBG("eerom_initialize\n");
   if(eerom_is_factory_reset()) {
     CDBG("eerom_initialize : FACTORY_RESET!!!\n");
     kt0803_factory_reset();

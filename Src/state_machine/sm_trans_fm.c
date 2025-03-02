@@ -38,13 +38,13 @@ static void trans_fm_main_display_freq(uint16_t freq)
     tm1650_set_dig(2, 0, '-');
     tm1650_set_dig(3, 0, '-');    
   } else {
-    tm1650_set_dig(0, 0, freq / 1000 ? (freq / 1000 + 0x30) : ' ');
+    tm1650_set_dig(3, 0, freq / 1000 ? (freq / 1000 + 0x30) : ' ');
     freq = freq % 1000;
-    tm1650_set_dig(1, 0, freq / 100 + 0x30);
+    tm1650_set_dig(2, 0, freq / 100 + 0x30);
     freq = freq % 100;
-    tm1650_set_dig(2, 1, freq / 10 + 0x30);
+    tm1650_set_dig(1, 1, freq / 10 + 0x30);
     freq = freq % 10;
-    tm1650_set_dig(3, 0, freq + 0x30);
+    tm1650_set_dig(0, 0, freq + 0x30);
   }
 }
 
@@ -64,21 +64,21 @@ static void do_trans_fm_main(uint8_t to_func, uint8_t to_state, enum task_events
   } else if(ev == EV_KEY_NEG_LPRESS) {
     kt0803_cfg.freq = kt0803_prev_ch(1);
   } else if(ev == EV_KEY_OK_PRESS) {
-    bit mute = (kt0803_cfg.flag & KT0803_CFG_FLAG_MUTE) ? 1 : 0;
+
     kt0803_cfg.flag &= ~KT0803_CFG_FLAG_MUTE;
-    kt0803_cfg.flag |= mute ? 0 : KT0803_CFG_FLAG_MUTE;
-    kt0803_set_mute(kt0803_cfg.flag & KT0803_CFG_FLAG_MUTE);
+    kt0803_cfg.flag |= kt0803_get_mute() ? 0 : KT0803_CFG_FLAG_MUTE;
+    kt0803_set_mute(!kt0803_get_mute());
   }
   trans_fm_main_display_freq(kt0803_cfg.freq);
 }
 
 static void trans_fm_main_display_vol(uint8_t vol)
 {
-  tm1650_set_dig(0, 0, 'U');
-  tm1650_set_dig(1, 0, 'O');
-  tm1650_set_dig(2, 0, vol / 10 ? (vol / 10 + 0x30) : ' ');
+  tm1650_set_dig(3, 0, 'U');
+  tm1650_set_dig(2, 0, 'O');
+  tm1650_set_dig(1, 0, vol / 10 ? (vol / 10 + 0x30) : ' ');
   vol %= 10;
-  tm1650_set_dig(3, 0, vol + 0x30);
+  tm1650_set_dig(0, 0, vol + 0x30);
 }
 
 static void do_trans_fm_volume(uint8_t to_func, uint8_t to_state, enum task_events ev)
@@ -111,21 +111,20 @@ static char * code menu_array[FM_MENU_ITEM] =
   "SD  ",
   "PA  ",
   "RFG ",
+  "STER",
+  "BR  ",   
   "PTC ", 
-  "STER", 
   "BASS",
   "FDD ",
   "AFRE", 
   "SCM ",
-  "PTA ",
-  "BR  ",  
+  "PTA ", 
 };
 
 
 static uint8_t trans_fm_main_menu;
 static void trans_fm_main_display_menu(uint8_t menu)
 {
-  CDBG("trans_fm_main_display_menu %bu\n", menu);
   tm1650_set_str(menu_array[menu % FM_MENU_ITEM]);
 }
 
@@ -221,9 +220,9 @@ static const struct sm_trans_slot code  sm_trans_fm_pwoff[] = {
 };
 
 const struct sm_state_slot code sm_function_trans_fm[] = {
-  {"SM_TRANS_FM_INIT", sm_trans_fm_init},
-  {"SM_TRANS_FM_MAIN", sm_trans_fm_main}, 
-  {"SM_TRANS_FM_VOLUME", sm_trans_fm_volume},
-  {"SM_TRANS_FM_MENU", sm_trans_fm_menu},
-  {"SM_TRANS_FM_PW_OFF", sm_trans_fm_pwoff},
+  {"INIT", sm_trans_fm_init},
+  {"MAIN", sm_trans_fm_main}, 
+  {"VOLUME", sm_trans_fm_volume},
+  {"MENU", sm_trans_fm_menu},
+  {"PW_OFF", sm_trans_fm_pwoff},
 };

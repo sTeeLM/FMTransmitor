@@ -8,6 +8,7 @@
 enum sm_states_trans_stereo
 {
   SM_TRANS_STEREO_INIT,
+  SM_TRANS_STEREO_MAIN,  
 };
 
 const struct sm_state_slot code sm_function_trans_stereo[];

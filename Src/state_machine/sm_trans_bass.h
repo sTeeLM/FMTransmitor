@@ -8,6 +8,7 @@
 enum sm_states_trans_bass
 {
   SM_TRANS_BASS_INIT,
+  SM_TRANS_BASS_MAIN,
 };
 
 const struct sm_state_slot code sm_function_trans_bass[];

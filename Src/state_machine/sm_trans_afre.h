@@ -8,6 +8,7 @@
 enum sm_states_trans_afre
 {
   SM_TRANS_AFRE_INIT,
+  SM_TRANS_AFRE_MAIN,  
 };
 
 const struct sm_state_slot code sm_function_trans_afre[];
