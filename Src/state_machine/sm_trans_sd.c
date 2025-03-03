@@ -164,6 +164,45 @@ static void do_trans_sd_ctl(uint8_t to_func, uint8_t to_state, enum task_events 
   }
 }
 
+static void trans_fm_main_display_time(kt0803_sln_time_t tm)
+{
+  const char * str = "    ";
+  switch(tm) {
+    case KT0803_SLN_TIME_50MS:  str = " 50M"; break;
+    case KT0803_SLN_TIME_100MS: str = "100M"; break;
+    case KT0803_SLN_TIME_200MS: str = "200M"; break;
+    case KT0803_SLN_TIME_400MS: str = "400M"; break;
+    case KT0803_SLN_TIME_1S:    str = "  1S"; break;
+    case KT0803_SLN_TIME_2S:    str = "  2S"; break;
+    case KT0803_SLN_TIME_4S:    str = "  4S"; break;
+    case KT0803_SLN_TIME_8S:    str = "  8S"; break;
+    case KT0803_SLN_TIME_16S:   str = " 16S"; break;
+    case KT0803_SLN_TIME_32S:   str = " 32S"; break;
+    case KT0803_SLN_TIME_40S:   str = " 40S"; break;
+    case KT0803_SLN_TIME_48S:   str = " 48S"; break;
+    case KT0803_SLN_TIME_56S:   str = " 56S"; break;
+    case KT0803_SLN_TIME_60S:   str = " 60S"; break;
+    case KT0803_SLN_TIME_64S:   str = " 64S"; break;
+  }
+  tm1650_set_str(str);
+}
+
+static void do_trans_sd_time(uint8_t to_func, uint8_t to_state, enum task_events ev)
+{
+  if(to_func != sm_cur_function || to_state != sm_cur_state) {
+    tm1650_set_str("TIME");
+    delay_ms(1000);
+    trans_fm_main_display_time(kt0803_get_sln_time());
+    return;
+  }
+  
+  if(ev == EV_KEY_PLUS_PRESS) {
+    trans_fm_main_display_time(kt0803_next_sln_time());
+  } else if(ev == EV_KEY_NEG_PRESS) {
+    trans_fm_main_display_time(kt0803_prev_sln_time());
+  }
+}
+
 static const struct sm_trans_slot code  sm_trans_sd_init[] = {
   {EV_KEY_UP, SM_TRANS_SD, SM_TRANS_SD_ONOFF, do_trans_sd_onoff},
   {NULL, NULL, NULL, NULL}
@@ -204,6 +243,14 @@ static const struct sm_trans_slot code  sm_trans_sd_cth[] = {
 static const struct sm_trans_slot code  sm_trans_sd_ctl[] = {
   {EV_KEY_PLUS_PRESS, SM_TRANS_SD, SM_TRANS_SD_CTL, do_trans_sd_ctl},
   {EV_KEY_NEG_PRESS, SM_TRANS_SD, SM_TRANS_SD_CTL, do_trans_sd_ctl},
+  {EV_KEY_OK_PRESS, SM_TRANS_SD, SM_TRANS_SD_TIME, do_trans_sd_time},
+  {EV_KEY_MENU_PRESS, SM_TRANS_FM, SM_TRANS_FM_INIT, do_trans_fm_init},  
+  {NULL, NULL, NULL, NULL}
+};
+
+static const struct sm_trans_slot code  sm_trans_sd_time[] = {
+  {EV_KEY_PLUS_PRESS, SM_TRANS_SD, SM_TRANS_SD_TIME, do_trans_sd_time},
+  {EV_KEY_NEG_PRESS, SM_TRANS_SD, SM_TRANS_SD_TIME, do_trans_sd_time},
   {EV_KEY_OK_PRESS, SM_TRANS_SD, SM_TRANS_SD_ONOFF, do_trans_sd_onoff},
   {EV_KEY_MENU_PRESS, SM_TRANS_FM, SM_TRANS_FM_INIT, do_trans_fm_init},  
   {NULL, NULL, NULL, NULL}
@@ -215,5 +262,6 @@ const struct sm_state_slot code sm_function_trans_sd[] = {
   {"THH", sm_trans_sd_thh},
   {"THL", sm_trans_sd_thl},
   {"CTH", sm_trans_sd_cth},
-  {"CTL", sm_trans_sd_ctl},  
+  {"CTL", sm_trans_sd_ctl},
+  {"TIME", sm_trans_sd_time},  
 };

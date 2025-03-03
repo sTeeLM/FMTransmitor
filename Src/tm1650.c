@@ -245,7 +245,7 @@ uint8_t tm1650_get_scan_code(void)
   
   I2C_Write(0x49);
   if(I2C_GetAck()) {
-    CDBG("tm1650_get_scan_code failed\n");
+//    CDBG("tm1650_get_scan_code failed\n");
     goto failed;
   }  
   

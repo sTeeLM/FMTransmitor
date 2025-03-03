@@ -43,6 +43,7 @@ typedef struct _kt0803_cfg_t
   uint8_t  slncthh;
   uint8_t  slnccnt_high;
   uint8_t  slnccnt_low;
+  uint8_t  sln_time;
   uint8_t  rf_gain;     // RF Gain
   int8_t   pga_gain;    // PGA (Volume)
   uint8_t  bass;        // Bass Boost Control
@@ -226,7 +227,7 @@ typedef enum _kt0803_slnccnt_high_t
 
 typedef enum _kt0803_slnccnt_low_t
 {
-  KT0803_SLNCCNT_LOW_1,
+  KT0803_SLNCCNT_LOW_1 = 0,
   KT0803_SLNCCNT_LOW_2,
   KT0803_SLNCCNT_LOW_4,
   KT0803_SLNCCNT_LOW_8, 
@@ -235,6 +236,25 @@ typedef enum _kt0803_slnccnt_low_t
   KT0803_SLNCCNT_LOW_64,
   KT0803_SLNCCNT_LOW_128, 
 }kt0803_slnccnt_low_t;
+
+typedef enum _kt0803_sln_time_t
+{
+  KT0803_SLN_TIME_50MS = 0,
+  KT0803_SLN_TIME_100MS,
+  KT0803_SLN_TIME_200MS, 
+  KT0803_SLN_TIME_400MS, 
+  KT0803_SLN_TIME_1S,
+  KT0803_SLN_TIME_2S,
+  KT0803_SLN_TIME_4S,
+  KT0803_SLN_TIME_8S,
+  KT0803_SLN_TIME_16S,
+  KT0803_SLN_TIME_32S,
+  KT0803_SLN_TIME_40S,
+  KT0803_SLN_TIME_48S, 
+  KT0803_SLN_TIME_56S,
+  KT0803_SLN_TIME_60S,
+  KT0803_SLN_TIME_64S,   
+}kt0803_sln_time_t;
 
 typedef enum _kt0803_swch_mod_t
 {
@@ -354,6 +374,8 @@ kt0803_slnccnt_high_t kt0803_get_slnccnt_high(void);
 void kt0803_set_slnccnt_high(kt0803_slnccnt_high_t th);
 kt0803_slnccnt_low_t kt0803_get_slnccnt_low(void);
 void kt0803_set_slnccnt_low(kt0803_slnccnt_low_t th);
+kt0803_sln_time_t kt0803_get_sln_time(void);
+void kt0803_set_sln_time(kt0803_sln_time_t tm);
 
 /* Reference Clock */
 bit kt0803_get_dclk(void);
@@ -407,6 +429,9 @@ kt0803_slncthh_t kt0803_prev_slncthh(void);
 
 kt0803_slncthl_t kt0803_next_slncthl(void);
 kt0803_slncthl_t kt0803_prev_slncthl(void);
+
+kt0803_sln_time_t kt0803_next_sln_time(void);
+kt0803_sln_time_t kt0803_prev_sln_time(void);
 
 kt0803_slnccnt_high_t kt0803_next_slnccnt_high(void);
 kt0803_slnccnt_high_t kt0803_prev_slnccnt_high(void);

@@ -19,7 +19,7 @@ void kt0803_factory_reset(void)
   kt0803_cfg.alc_comp_gain = (uint8_t)KT0803_ALC_COMP_GAIN_N3DB;
   kt0803_cfg.alc_hold = (uint8_t)KT0803_ALC_HOLD_5S;
   kt0803_cfg.alc_high_th = (uint8_t)KT0803_ALC_HIGH_TH_0P6;
-  kt0803_cfg.alc_low_th = (uint8_t)KT0803_ALC_LOW_TH_0P25; 
+  kt0803_cfg.alc_low_th = (uint8_t)KT0803_ALC_LOW_TH_0P25;
 
   // Silence Detection: disable
   kt0803_cfg.flag |= KT0803_CFG_FLAG_SLNCDIS;
@@ -27,6 +27,7 @@ void kt0803_factory_reset(void)
   kt0803_cfg.slncthh = (uint8_t)KT0803_SLNCTHH_050MV;
   kt0803_cfg.slnccnt_high = (uint8_t)KT0803_SLNCCNT_HIGH_15;
   kt0803_cfg.slnccnt_low = (uint8_t)KT0803_SLNCCNT_LOW_1;
+  kt0803_cfg.sln_time = (uint8_t)KT0803_SLN_TIME_50MS;  
   
   // RF Gain: 108.0dB
   kt0803_cfg.rf_gain = (uint8_t)KT0803_RF_GAIN_1080;
@@ -70,7 +71,7 @@ static void kt0803_dump_device(void)
 {
   uint8_t i, dat;
   
-  
+  /*
   CDBG("    ");
   for(i = 0 ; i <= 0xF ; i ++ ) {
     CDBG("  %bx", i);
@@ -89,10 +90,12 @@ static void kt0803_dump_device(void)
   if(i % 16 != 0) {
     CDBG("\n");
   }
+  */
 }
 
 static void kt0803_dump_cfg(void)
 {
+  /*
   CDBG("kt0803 cfg:\n");
   
   CDBG("flag 0x%04x\n", kt0803_cfg.flag);
@@ -109,12 +112,14 @@ static void kt0803_dump_cfg(void)
   CDBG("slncthh %bu\n", kt0803_cfg.slncthh);
   CDBG("slnccnt_high %bu\n", kt0803_cfg.slnccnt_high);  
   CDBG("slnccnt_low %bu\n", kt0803_cfg.slnccnt_low);
+  CDBG("sln_time %bu\n", kt0803_cfg.sln_time);
   
   CDBG("pga_gain %bd\n", kt0803_cfg.pga_gain); 
   
   CDBG("rf_gain %bu\n", kt0803_cfg.rf_gain);
 
-  CDBG("bass %bu\n", kt0803_cfg.bass);  
+  CDBG("bass %bu\n", kt0803_cfg.bass); 
+*/  
 }
 
 void kt0803_initialize(void)
@@ -135,6 +140,7 @@ void kt0803_initialize(void)
     indicator Reg 0x0F[4] is set to 1. Otherwise, the
     device may be destroyed!  
   */
+  kt0803_set_pa_ctl(KT0803_PA_CTL_EXTERNAL);
   
   //CDBG("kt0803 before\n");
   //kt0803_dump_device();
@@ -159,6 +165,7 @@ void kt0803_initialize(void)
   kt0803_set_slncthh(kt0803_cfg.slncthh);
   kt0803_set_slnccnt_high(kt0803_cfg.slnccnt_high);
   kt0803_set_slnccnt_low(kt0803_cfg.slnccnt_low);
+  kt0803_set_sln_time(kt0803_cfg.sln_time);
   
   // RF Gain
   kt0803_set_rf_gain(kt0803_cfg.rf_gain);
@@ -396,6 +403,18 @@ kt0803_slnccnt_low_t kt0803_prev_slnccnt_low(void)
   return kt0803_cfg.slnccnt_low;
 }
 
+kt0803_sln_time_t kt0803_next_sln_time(void)
+{
+  kt0803_next_value(kt0803_set_sln_time, &kt0803_cfg.sln_time, KT0803_SLN_TIME_50MS, KT0803_SLN_TIME_64S);
+  return kt0803_cfg.sln_time;
+}
+
+kt0803_sln_time_t kt0803_prev_sln_time(void)
+{
+  kt0803_prev_value(kt0803_set_sln_time, &kt0803_cfg.sln_time, KT0803_SLN_TIME_50MS, KT0803_SLN_TIME_64S);
+  return kt0803_cfg.sln_time;
+}
+
 kt0803_rf_gain_t kt0803_next_rf_gain(void)
 {
   kt0803_next_value(kt0803_set_rf_gain, &kt0803_cfg.rf_gain, KT0803_RF_GAIN_955, KT0803_RF_GAIN_1080);
@@ -425,7 +444,7 @@ static uint8_t kt0803_read_reg(uint8_t addr)
 {
   uint8_t dat;
   if(I2C_Get(0x7c, addr, &dat)) {
-    CDBG("kt0803_read_reg %bx failed!\n", addr);
+//    CDBG("kt0803_read %bx failed!\n", addr);
     dat = 0;
   }
   return dat;
@@ -434,7 +453,7 @@ static uint8_t kt0803_read_reg(uint8_t addr)
 static void kt0803_write_reg(uint8_t addr, uint8_t dat)
 {
   if(I2C_Put(0x7c, addr, dat)) {
-    CDBG("kt0803_write_reg %bx failed!\n", addr);
+//    CDBG("kt0803_write %bx failed!\n", addr);
   }
 }
 
@@ -443,7 +462,6 @@ static uint8_t kt0803_get_reg(uint8_t addr, uint8_t bit_index, uint8_t bit_len)
   uint8_t bit_mask = 0, i, dat, bit_off;
   
   if(bit_index > 7 || bit_len > 8 || (bit_index + 1) < bit_len) {
-    CDBG("kt0803_get_reg wrong param!\n", bit_index, bit_len);
     return 0;
   }
   
@@ -1070,6 +1088,22 @@ kt0803_slnccnt_low_t kt0803_get_slnccnt_low(void)
 void kt0803_set_slnccnt_low(kt0803_slnccnt_low_t th)
 {
   kt0803_set_reg(0x16, 2, 3, ((uint8_t)th & 0x7));
+}
+
+kt0803_sln_time_t kt0803_get_sln_time(void)
+{
+  uint8_t tm;
+  
+  tm = kt0803_get_reg(0x14, 0, 1);
+  tm <<= 3;
+  tm |= kt0803_get_reg(0x14, 7, 3);
+  return (kt0803_sln_time_t) tm;
+}
+
+void kt0803_set_sln_time(kt0803_sln_time_t tm)
+{
+  kt0803_set_reg(0x14, 0, 1, (uint8_t)tm & 0x8 ? 1 : 0);
+  kt0803_set_reg(0x14, 7, 3, (uint8_t)tm & 0x7);
 }
 
 /*

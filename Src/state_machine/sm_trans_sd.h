@@ -12,7 +12,8 @@ enum sm_states_trans_sd
   SM_TRANS_SD_THH, // Silence Detection High Threshold
   SM_TRANS_SD_THL, // Silence Detection Low Threshold
   SM_TRANS_SD_CTH,
-  SM_TRANS_SD_CTL,  
+  SM_TRANS_SD_CTL, 
+  SM_TRANS_SD_TIME,   
 };
 
 const struct sm_state_slot code sm_function_trans_sd[];
