@@ -1,6 +1,7 @@
 #include "tm1650.h"
 #include "i2c.h"
 #include "debug.h"
+#include "delay.h"
 
 tm1650_cfg_t tm1650_cfg;
 static uint8_t tm1650_data[4];
@@ -72,11 +73,20 @@ void tm1650_factory_reset(void)
 
 void tm1650_initialize(void)
 {
+  tm1650_data[0] = tm1650_data[1] 
+    = tm1650_data[2] = tm1650_data[3] = 0;
   tm1650_display_mode = 0;
   tm1650_set_mod(TM1650_MOD_8_DIG);
-  tm1650_set_brightness(7);
   tm1650_enable_display(1);
-  tm1650_clear();  
+  tm1650_set_brightness(7);
+  tm1650_clear();
+  tm1650_set_dig(3, 0, '-');
+  delay_ms(200);
+  tm1650_set_dig(2, 0, '-');
+  delay_ms(200);
+  tm1650_set_dig(1, 0, '-');
+  delay_ms(200);
+  tm1650_set_dig(0, 0, '-');  
 }
 
 void tm1650_clear(void)
@@ -155,6 +165,7 @@ uint8_t tm1650_next_brightness(void)
   uint8_t br = tm1650_get_brightness();
   br = ( ++ br) % 8;
   tm1650_set_brightness(br);
+  tm1650_cfg.brightness = br;
   return br;
   
 }
@@ -167,6 +178,7 @@ uint8_t tm1650_prev_brightness(void)
   else
     br --;
   tm1650_set_brightness(br);
+  tm1650_cfg.brightness = br;
   return br;
 }
 

@@ -158,9 +158,15 @@ void do_trans_fm_pwoff(uint8_t to_func, uint8_t to_state, enum task_events ev)
 {
   tm1650_clear();
   if(ev == EV_KEY_POWER_PRESS) {
-    tm1650_set_str(" OFF");
+    tm1650_set_str("----");
     eerom_save_config();
-    delay_ms(1000);
+    tm1650_set_dig(0, 0, ' ');
+    delay_ms(200);
+    tm1650_set_dig(1, 0, ' ');
+    delay_ms(200);
+    tm1650_set_dig(2, 0, ' ');
+    delay_ms(200);
+    tm1650_set_dig(3, 0, ' ');  
     power_set_enable(0);
   }
 }
