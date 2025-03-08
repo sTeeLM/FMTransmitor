@@ -71,7 +71,7 @@ static void kt0803_dump_device(void)
 {
   uint8_t i, dat;
   
-  /*
+  
   CDBG("    ");
   for(i = 0 ; i <= 0xF ; i ++ ) {
     CDBG("  %bx", i);
@@ -90,7 +90,7 @@ static void kt0803_dump_device(void)
   if(i % 16 != 0) {
     CDBG("\n");
   }
-  */
+  
 }
 
 static void kt0803_dump_cfg(void)
@@ -143,7 +143,7 @@ void kt0803_initialize(void)
   kt0803_set_pa_ctl(KT0803_PA_CTL_EXTERNAL);
   
   //CDBG("kt0803 before\n");
-  //kt0803_dump_device();
+  kt0803_dump_device();
   
   /* load cfg into chip */
   // Channel:
@@ -204,7 +204,7 @@ void kt0803_initialize(void)
   kt0803_set_mute((kt0803_cfg.flag & KT0803_CFG_FLAG_MUTE) ? 1 : 0);
 
   //CDBG("kt0803 after\n");
-  //kt0803_dump_device();
+  kt0803_dump_device();
 }
 
 // ----------------------------------------------------------------------------

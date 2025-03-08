@@ -180,7 +180,7 @@ void tm1650_enable_display(bit enable)
 static void tm1650_set_data(uint8_t index, uint8_t dat)
 {
   uint8_t addr = 0x68;
-  addr += index * 2;
+  addr += (3 - index) * 2;
   
   I2C_Init();
   I2C_Start();
