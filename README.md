@@ -30,8 +30,8 @@ Additionally, if an older car only has a radio, this device can be used to play 
 3. **Advanced functions**: ALC (Automatic Level Control), etc.
 
 ## Design Details
-1. The FM radio frequency chip uses **KT0803L**, which is quite feature-rich, with most configurations done on the microcontroller.
-2. The LED digital tube control chip uses **TM1650**, which fully liberates the microcontroller and also achieves key freedom.
-3. The main control still uses **STC8G**, and in this production, no external ROM is used; instead, the microcontroller's built-in EEROM is utilized.
+1. The FM radio frequency chip uses **KT0803L**, which is quite feature-rich, with most configurations exported as config with the microcontroller.
+2. The LED digital tube control chip uses **TM1650**, which fully free the microcontroller from led scan and key scan logic.
+3. The microcontroller still uses **STC8G**, no external ROM is used; instead, the microcontroller's built-in EEROM is utilized.
 4. Since the LED uses a blue digital tube that requires **5V** to drive, and the FM chip requires a **3.3V** operating voltage, an **I2C level conversion logic** is needed.
 5. The PCB design ensures that the **digital ground plane** and **analog ground plane** are separated and connected at a single point.
