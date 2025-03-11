@@ -1,23 +1,23 @@
-# FM·¢ÉäÆ÷
+# FMå‘å°„å™¨
 
-![Ç°Á³](<Doc/Pictures/main.jpg>) 
+![å‰è„¸](<Doc/Pictures/main.jpg>) 
 
-## ÓÐÊ²Ã´ÓÃ
-½«ÒôÆµÊäÈëÍ¨¹ýFMµ÷ÖÆ³öÈ¥£¬ÆµÂÊ·¶Î§70~108MHz¡£  
-ÎÒ¹¤×÷Ì¨ÉÏÓÐ¸öµÂÉúµÄÊÕÒô»ú£¬ÓÐÁËÕâ¸ö×°ÖÃ£¬¿ÉÒÔ°ÑÊÕÒô»ú±äÎªÒ»¸öÍâ·ÅÀ®°È£¬ÕâÑù¾ÍÊ¡ÁËÒ»¸öÍâÖÃÒôÏì¡£
-ÁíÍâÀÏÊµµÄ³µÉÏÖ»ÓÐÊÕÒô»úµÄ»°£¬¿ÉÒÔÓÃÕâ¸ö×°ÖÃ½«MP3Íâ·Åµ½ÊÕÒô»úÉÏ¡£
+## æœ‰ä»€ä¹ˆç”¨
+å°†éŸ³é¢‘è¾“å…¥é€šè¿‡FMè°ƒåˆ¶å‡ºåŽ»ï¼Œé¢‘çŽ‡èŒƒå›´70~108MHzã€‚  
+æˆ‘å·¥ä½œå°ä¸Šæœ‰ä¸ªå¾·ç”Ÿçš„æ”¶éŸ³æœºï¼Œæœ‰äº†è¿™ä¸ªè£…ç½®ï¼Œå¯ä»¥æŠŠæ”¶éŸ³æœºå˜ä¸ºä¸€ä¸ªå¤–æ”¾å–‡å­ï¼Œè¿™æ ·å°±çœäº†ä¸€ä¸ªå¤–ç½®éŸ³å“ã€‚
+å¦å¤–è€å®žçš„è½¦ä¸Šåªæœ‰æ”¶éŸ³æœºçš„è¯ï¼Œå¯ä»¥ç”¨è¿™ä¸ªè£…ç½®å°†MP3å¤–æ”¾åˆ°æ”¶éŸ³æœºä¸Šã€‚
 
-## ¹¦ÄÜ
-1. ÆµÂÊµ÷½Ú£º70~108MHz²½³¤0.1MHz¡£
-2. ³£ÓÃ¹¦ÄÜ£ºµ÷½ÚÒôÁ¿¡¢¾²Òô¡¢ÏÔÊ¾ÁÁ¶È¡£
-3. ¸ß¼¶¹¦ÄÜ£ºALC(Automatic Level Control)µÈµÈ¡£
+## åŠŸèƒ½
+1. é¢‘çŽ‡è°ƒèŠ‚ï¼š70~108MHzæ­¥é•¿0.1MHzã€‚
+2. å¸¸ç”¨åŠŸèƒ½ï¼šè°ƒèŠ‚éŸ³é‡ã€é™éŸ³ã€æ˜¾ç¤ºäº®åº¦ã€‚
+3. é«˜çº§åŠŸèƒ½ï¼šALC(Automatic Level Control)ç­‰ç­‰ã€‚
 
-## Éè¼ÆÏ¸½Ú
-1. FMÉäÆµÐ¾Æ¬Ê¹ÓÃKT0803L£¬¹¦ÄÜ±È½Ï·á¸»£¬»ù±¾¶¼ÔÚµ¥Æ¬»úÉÏ×öÁËÅäÖÃÏî¡£
-2. LEDÊýÂë¹Ü¿ØÖÆÐ¾Æ¬Ê¹ÓÃTM1650£¬³ä·Ö½â·ÅÁËµ¥Æ¬»ú£¬¶øÇÒÊµÏÖÁË°´¼ü×ÔÓÉ¡£
-3. Ö÷¿Ø»¹ÊÇÊ¹ÓÃSTC8G£¬²¢ÇÒÔÚ±¾ÖÆ×÷ÖÐÃ»ÓÐÓÃÍâÖÃROM£¬¶øÊÇÊ¹ÓÃÁËµ¥Æ¬»ú×Ô´øµÄEEROM¡£
-4. ÓÉÓÚLEDÊ¹ÓÃÀ¶É«ÊýÂë¹Ü£¬ÐèÒª5VÇý¶¯£¬¶øFMÐ¾Æ¬ÐèÒª3.3V¹¤×÷µçÑ¹£¬ÐèÒªÒ»¸öI2CµÄµçÆ½×ª»¯Âß¼­¡£
-5. PCB×¢ÒâÊý×ÖµØÆ½ÃæºÍÄ£ÄâµØÆ½Ãæ·Ö¿ª£¬²¢ÇÒµ¥µãÁ¬Í¨¡£
+## è®¾è®¡ç»†èŠ‚
+1. FMå°„é¢‘èŠ¯ç‰‡ä½¿ç”¨KT0803Lï¼ŒåŠŸèƒ½æ¯”è¾ƒä¸°å¯Œï¼ŒåŸºæœ¬éƒ½åœ¨å•ç‰‡æœºä¸Šåšäº†é…ç½®é¡¹ã€‚
+2. LEDæ•°ç ç®¡æŽ§åˆ¶èŠ¯ç‰‡ä½¿ç”¨TM1650ï¼Œå……åˆ†è§£æ”¾äº†å•ç‰‡æœºï¼Œè€Œä¸”å®žçŽ°äº†æŒ‰é”®è‡ªç”±ã€‚
+3. ä¸»æŽ§è¿˜æ˜¯ä½¿ç”¨STC8Gï¼Œå¹¶ä¸”åœ¨æœ¬åˆ¶ä½œä¸­æ²¡æœ‰ç”¨å¤–ç½®ROMï¼Œè€Œæ˜¯ä½¿ç”¨äº†å•ç‰‡æœºè‡ªå¸¦çš„EEROMã€‚
+4. ç”±äºŽLEDä½¿ç”¨è“è‰²æ•°ç ç®¡ï¼Œéœ€è¦5Vé©±åŠ¨ï¼Œè€ŒFMèŠ¯ç‰‡éœ€è¦3.3Vå·¥ä½œç”µåŽ‹ï¼Œéœ€è¦ä¸€ä¸ªI2Cçš„ç”µå¹³è½¬åŒ–é€»è¾‘ã€‚
+5. PCBæ³¨æ„æ•°å­—åœ°å¹³é¢å’Œæ¨¡æ‹Ÿåœ°å¹³é¢åˆ†å¼€ï¼Œå¹¶ä¸”å•ç‚¹è¿žé€šã€‚
 
 ## What is it used for?
 It modulates audio input through FM transmission, with a frequency range of 70~108MHz.  
