@@ -25,7 +25,7 @@ I have a Tecsun radio on my workbench, and with this device, the radio can be tu
 Additionally, if an older car only has a radio, this device can be used to play MP3s through the car's radio.
 
 ## Features
-1. **Frequency adjustment**: 70~108MHz with a step size of 0.1MHz.
+1. **Frequency adjustment**: 70~108MHz step with 0.1MHz.
 2. **Common functions**: Volume adjustment, mute, display brightness.
 3. **Advanced functions**: ALC (Automatic Level Control), etc.
 
