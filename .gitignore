@@ -13,6 +13,9 @@
 *._i
 *.__i
 
+# Listing Files
+*.i
+
 # Libraries
 *.lib
 *.a
